@@ -73,3 +73,48 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = HangmanGame()
     sys.exit(app.exec())
+
+# class ImageDisplay(QMainWindow):
+#     def __init__(self):
+#         super().__init__()
+
+#         self.initUI()
+
+#     def initUI(self):
+#         # Создаем виджет QLabel
+#         self.label = QLabel(self)
+
+#         # Создаем кнопку для изменения изображения
+#         self.button = QPushButton('Изменить изображение', self)
+#         self.button.clicked.connect(self.toggleImage)
+
+#         # Устанавливаем кнопку и QLabel в макет
+#         layout = QVBoxLayout()
+#         layout.addWidget(self.label)
+#         layout.addWidget(self.button)
+
+#         # Создаем основной виджет и устанавливаем в него главный макет
+#         central_widget = QWidget()
+#         central_widget.setLayout(layout)
+
+#         # Устанавливаем центральный виджет в главное окно
+#         self.setCentralWidget(central_widget)
+
+#         # Устанавливаем изображения
+#         self.image_paths = ['src/RF.png', 'src/UK.png']
+#         self.current_image_index = 0
+#         self.loadImage()
+
+#         # Устанавливаем заголовок окна
+#         self.setWindowTitle('Image Display')
+
+#     def loadImage(self):
+#         # Загружаем изображение в QPixmap
+#         pixmap = QPixmap(self.image_paths[self.current_image_index])
+#         self.label.setPixmap(pixmap)
+#         self.resize(pixmap.width(), pixmap.height())
+
+#     def toggleImage(self):
+#         # Переключаем индекс изображения
+#         self.current_image_index = (self.current_image_index + 1) % len(self.image_paths)
+#         self.loadImage()
