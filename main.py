@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton
 from PyQt6.QtGui import QPixmap
 from PyQt6 import QtCore, QtGui, QtWidgets
-from test import translate_start
+from translator import translate_start
 from category import CategoryWindow
 import sys
 
@@ -78,12 +78,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         self.setWindowTitle("Виселица")
+        
     def start_game(self):
-        # Создать экземпляр CategoryWindow
-        category_window = CategoryWindow()
-        # Показать окно категории
-        category_window.show()
+        self.hide()
+        self.windows = CategoryWindow()
+        self.windows.show()
 
+        
 
     def loadImage(self):
         # Загружаем изображение в QPixmap
