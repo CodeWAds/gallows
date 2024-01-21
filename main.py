@@ -1,8 +1,8 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout
 from PyQt6.QtGui import QPixmap
 from PyQt6 import QtCore, QtGui, QtWidgets
 from translator import translate_start
-from category import CategoryWindow
+
 import sys
 
 
@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         self.setFixedSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 16pt \"Fixedsys\"")
-        self.setTabShape(QtWidgets.QTabWidget.TabShape.Rounded)
+        
 
         # Название игры в окне
         self.centralwidget = QWidget(self)
@@ -28,11 +28,11 @@ class MainWindow(QMainWindow):
         self.label_flag = QLabel(self)
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
         self.label_flag.setObjectName("label_flag")
-        self.image_paths = ['src/RF.png', 'src/UK.png']
+        self.image_paths = ['src/language/RF.png', 'src/language/UK.png']
         self.current_image_index = 0
         self.loadImage()
         self.label_flag.setObjectName("label_flag")
-
+        
         self.name_game = QLabel(self)
         self.name_game.setGeometry(QtCore.QRect(310, 100, 100, 20))
         self.name_game.setStyleSheet("font-size: 20pt;")
@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         self.name_game.setText("Виселица")
 
         self.lang_button = QPushButton(self)
-
+        
         self.lang_button.setGeometry(QtCore.QRect(10, 40, 70, 30))
         self.lang_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
@@ -78,12 +78,23 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         self.setWindowTitle("Виселица")
+
+
         
     def start_game(self):
-        self.hide()
-        self.windows = CategoryWindow()
-        self.windows.show()
-
+        self.lang_button.hide()
+        self.label_flag.hide()
+        self.start_button.hide()
+        
+        
+       
+        if self.current_image_index == 0:
+            self.name_game.setText("Категория")
+        else:
+            self.name_game.setText("Category")
+        
+        
+        
         
 
     def loadImage(self):

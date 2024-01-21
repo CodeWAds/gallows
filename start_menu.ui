@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>385</height>
+    <width>720</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,9 +24,9 @@ font: 16pt &quot;Fixedsys&quot;</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>324</x>
       <y>60</y>
-      <width>71</width>
+      <width>72</width>
       <height>21</height>
      </rect>
     </property>
@@ -34,39 +34,16 @@ font: 16pt &quot;Fixedsys&quot;</string>
      <string>Категория</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>200</y>
+      <x>140</x>
+      <y>230</y>
       <width>451</width>
-      <height>51</height>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid #dfe6e9;
-background-color: #a29bfe;
-border-radius: 5px;
-padding: 50px;
-</string>
-       </property>
-       <property name="text">
-        <string>СТАРТ</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="pushButton_3">
        <property name="cursor">
@@ -92,6 +69,29 @@ padding: 50px;
      </item>
      <item row="0" column="3">
       <widget class="QPushButton" name="pushButton_2">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid #dfe6e9;
+background-color: #a29bfe;
+border-radius: 5px;
+padding: 50px;
+</string>
+       </property>
+       <property name="text">
+        <string>СТАРТ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton">
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
        </property>

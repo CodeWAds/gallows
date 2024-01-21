@@ -6,4 +6,3 @@ translate_start = {
     "Виселица" : "Gallows",
 }
 
-
