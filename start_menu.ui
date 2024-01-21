@@ -44,29 +44,6 @@ font: 16pt &quot;Fixedsys&quot;</string>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid #dfe6e9;
-background-color: #a29bfe;
-border-radius: 5px;
-padding: 50px;
-</string>
-       </property>
-       <property name="text">
-        <string>СТАРТ</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="3">
       <widget class="QPushButton" name="pushButton_2">
        <property name="cursor">
@@ -92,6 +69,29 @@ padding: 50px;
      </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="pushButton">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid #dfe6e9;
+background-color: #a29bfe;
+border-radius: 5px;
+padding: 50px;
+</string>
+       </property>
+       <property name="text">
+        <string>СТАРТ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButton_3">
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
        </property>

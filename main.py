@@ -9,15 +9,16 @@ import sys
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.create_window()
 
-        self.StartMenu()
-
-    def StartMenu(self):
-        # Установка окна
+    def create_window(self):
         self.setObjectName("MainWindow")
         self.setFixedSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 16pt \"Fixedsys\"")
+        self.StartMenu()
+    def StartMenu(self):
+    
 
         # Название игры в окне
         self.centralwidget = QWidget(self)
@@ -72,24 +73,24 @@ class MainWindow(QMainWindow):
                                         "")
         self.start_button.setObjectName("start_button")
         self.start_button.setText("СТАРТ")
-        self.start_button.clicked.connect(self.start_game)
+        self.start_button.clicked.connect(self.category_game)
 
         self.setCentralWidget(self.centralwidget)
 
         self.setWindowTitle("Виселица")
 
-    def start_game(self):
-        category_widget = QWidget(self)
-        category_widget.setObjectName("category_widget")
+    def category_game(self):
+        self.category_widget = QWidget(self)
+        self.category_widget.setObjectName("category_widget")
 
-        name_cat = QLabel(category_widget)
+        name_cat = QLabel(self.category_widget)
         name_cat.setGeometry(QtCore.QRect(310, 100, 100, 20))
         name_cat.setStyleSheet("font-size: 20pt;")
         name_cat.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         name_cat.setObjectName("name_game")
         name_cat.setText("Категория")
 
-        hardware_button = QPushButton(category_widget)
+        hardware_button = QPushButton(self.category_widget)
         hardware_button.setGeometry(QtCore.QRect(140, 260, 147, 39))
         hardware_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
@@ -104,8 +105,9 @@ class MainWindow(QMainWindow):
         hardware_button.setObjectName("hardware_button")
         hardware_button.setText("Аппаратное\n"
                                 "обеспечение")
+        hardware_button.clicked.connect()
 
-        software_button = QPushButton(category_widget)
+        software_button = QPushButton(self.category_widget)
 
         software_button.setGeometry(QtCore.QRect(292, 260, 147, 39))
         software_button.setCursor(QtGui.QCursor(
@@ -122,7 +124,7 @@ class MainWindow(QMainWindow):
         software_button.setText("Программное\n"
                                 "обеспечение")
 
-        internet_button = QPushButton(category_widget)
+        internet_button = QPushButton(self.category_widget)
 
         internet_button.setGeometry(QtCore.QRect(444, 260, 147, 39))
         internet_button.setCursor(QtGui.QCursor(
@@ -138,7 +140,7 @@ class MainWindow(QMainWindow):
         internet_button.setObjectName("internet_button")
         internet_button.setText("Интернет")
 
-        self.setCentralWidget(category_widget)
+        self.setCentralWidget(self.category_widget)
 
         if self.current_image_index != 0:
             name_cat.setText("Category")
@@ -149,10 +151,12 @@ class MainWindow(QMainWindow):
     def category_hardware(self):
         game_widget = QWidget(self)
 
-        
-
         self.setCentralWidget(game_widget)
 
+    def start_again(self):
+        self.category_widget.hide()
+        
+        
 
     def loadImage(self):
         # Загружаем изображение в QPixmap
