@@ -18,7 +18,6 @@ class MainWindow(QMainWindow):
         self.setFixedSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 16pt \"Fixedsys\"")
-        
 
         # Название игры в окне
         self.centralwidget = QWidget(self)
@@ -32,7 +31,7 @@ class MainWindow(QMainWindow):
         self.current_image_index = 0
         self.loadImage()
         self.label_flag.setObjectName("label_flag")
-        
+
         self.name_game = QLabel(self)
         self.name_game.setGeometry(QtCore.QRect(310, 100, 100, 20))
         self.name_game.setStyleSheet("font-size: 20pt;")
@@ -41,7 +40,7 @@ class MainWindow(QMainWindow):
         self.name_game.setText("Виселица")
 
         self.lang_button = QPushButton(self)
-        
+
         self.lang_button.setGeometry(QtCore.QRect(10, 40, 70, 30))
         self.lang_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
@@ -79,23 +78,81 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Виселица")
 
+    def start_game(self):
+        category_widget = QWidget(self)
+        category_widget.setObjectName("category_widget")
+
+        name_cat = QLabel(category_widget)
+        name_cat.setGeometry(QtCore.QRect(310, 100, 100, 20))
+        name_cat.setStyleSheet("font-size: 20pt;")
+        name_cat.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        name_cat.setObjectName("name_game")
+        name_cat.setText("Категория")
+
+        hardware_button = QPushButton(category_widget)
+        hardware_button.setGeometry(QtCore.QRect(140, 260, 147, 39))
+        hardware_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        hardware_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        hardware_button.setAutoFillBackground(False)
+        hardware_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+                                      "background-color: #a29bfe;\n"
+                                      "border-radius: 5px;\n"
+                                      "font: 12pt \"Fixedsys\""
+                                      "")
+        hardware_button.setObjectName("hardware_button")
+        hardware_button.setText("Аппаратное\n"
+                                "обеспечение")
+
+        software_button = QPushButton(category_widget)
+
+        software_button.setGeometry(QtCore.QRect(292, 260, 147, 39))
+        software_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        software_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        software_button.setAutoFillBackground(False)
+        software_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+                                      "background-color: #a29bfe;\n"
+                                      "border-radius: 5px;\n"
+                                      "font: 12pt \"Fixedsys\""
+                                      "")
+        software_button.setObjectName("soft_button")
+        software_button.setText("Программное\n"
+                                "обеспечение")
+
+        internet_button = QPushButton(category_widget)
+
+        internet_button.setGeometry(QtCore.QRect(444, 260, 147, 39))
+        internet_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        internet_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        internet_button.setAutoFillBackground(False)
+        internet_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+                                      "background-color: #a29bfe;\n"
+                                      "border-radius: 5px;\n"
+                                      "font: 12pt \"Fixedsys\""
+                                      "")
+        internet_button.setObjectName("internet_button")
+        internet_button.setText("Интернет")
+
+        self.setCentralWidget(category_widget)
+
+        if self.current_image_index != 0:
+            name_cat.setText("Category")
+            hardware_button.setText("Hardware")
+            software_button.setText("Software")
+            internet_button.setText("Internet")
+
+    def category_hardware(self):
+        game_widget = QWidget(self)
 
         
-    def start_game(self):
-        self.lang_button.hide()
-        self.label_flag.hide()
-        self.start_button.hide()
-        
-        
-       
-        if self.current_image_index == 0:
-            self.name_game.setText("Категория")
-        else:
-            self.name_game.setText("Category")
-        
-        
-        
-        
+
+        self.setCentralWidget(game_widget)
+
 
     def loadImage(self):
         # Загружаем изображение в QPixmap
