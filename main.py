@@ -17,8 +17,8 @@ class MainWindow(QMainWindow):
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 16pt \"Fixedsys\"")
         self.StartMenu()
+
     def StartMenu(self):
-    
 
         # Название игры в окне
         self.centralwidget = QWidget(self)
@@ -105,7 +105,7 @@ class MainWindow(QMainWindow):
         hardware_button.setObjectName("hardware_button")
         hardware_button.setText("Аппаратное\n"
                                 "обеспечение")
-        hardware_button.clicked.connect()
+        hardware_button.clicked.connect(self.hardware)
 
         software_button = QPushButton(self.category_widget)
 
@@ -148,15 +148,27 @@ class MainWindow(QMainWindow):
             software_button.setText("Software")
             internet_button.setText("Internet")
 
-    def category_hardware(self):
-        game_widget = QWidget(self)
+    def hardware(self):
+        self.hardware_widget = QWidget(self)
+        self.hardware_widget.setObjectName("hardware_widget")
 
-        self.setCentralWidget(game_widget)
+        name_game = QLabel(self.hardware_widget)
+        name_game.setGeometry(QtCore.QRect(310, 100, 100, 20))
+        name_game.setStyleSheet("font-size: 20pt;")
+        name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        name_game.setObjectName("name_game")
+        name_game.setText("Игра")
 
-    def start_again(self):
-        self.category_widget.hide()
-        
-        
+        self.setCentralWidget(self.hardware_widget)
+
+        # if self.current_image_index != 0:
+        #     name_cat.setText("Category")
+        #     hardware_button.setText("Hardware")
+        #     software_button.setText("Software")
+        #     internet_button.setText("Internet")
+
+    # def start_again(self):
+    #     self.category_widget.hide()
 
     def loadImage(self):
         # Загружаем изображение в QPixmap
