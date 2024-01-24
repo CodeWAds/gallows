@@ -47,10 +47,11 @@ class MainWindow(QMainWindow):
         self.lang_button.setLayoutDirection(
             QtCore.Qt.LayoutDirection.LeftToRight)
         self.lang_button.setAutoFillBackground(False)
-        self.lang_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+        self.lang_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                        "background-color: #a29bfe;\n"
                                        "border-radius: 5px;\n"
-                                       "font: 12pt \"Fixedsys\""
+                                       "font: 12pt \"Fixedsys\";}\n"
+                                       "QPushButton:hover { background-color: #8c7ae6; }"
                                        "")
         self.lang_button.setObjectName("lang_button")
         self.lang_button.setText("Сменить\n"
@@ -65,10 +66,11 @@ class MainWindow(QMainWindow):
         self.start_button.setLayoutDirection(
             QtCore.Qt.LayoutDirection.LeftToRight)
         self.start_button.setAutoFillBackground(False)
-        self.start_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+        self.start_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                         "background-color: #a29bfe;\n"
                                         "border-radius: 5px;\n"
-                                        "padding: 50px;\n"
+                                        "padding: 50px;}\n"
+                                        "QPushButton:hover { background-color: #8c7ae6; }"
                                         "")
         self.start_button.setObjectName("start_button")
         self.start_button.setText("СТАРТ")
@@ -96,10 +98,11 @@ class MainWindow(QMainWindow):
         hardware_button.setLayoutDirection(
             QtCore.Qt.LayoutDirection.LeftToRight)
         hardware_button.setAutoFillBackground(False)
-        hardware_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+        hardware_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                       "background-color: #a29bfe;\n"
                                       "border-radius: 5px;\n"
-                                      "font: 12pt \"Fixedsys\""
+                                      "font: 12pt \"Fixedsys\";}\n"
+                                      "QPushButton:hover { background-color:#8c7ae6; }"
                                       "")
         hardware_button.setObjectName("hardware_button")
         hardware_button.setText("Аппаратное\n"
@@ -114,10 +117,11 @@ class MainWindow(QMainWindow):
         software_button.setLayoutDirection(
             QtCore.Qt.LayoutDirection.LeftToRight)
         software_button.setAutoFillBackground(False)
-        software_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+        software_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                       "background-color: #a29bfe;\n"
                                       "border-radius: 5px;\n"
-                                      "font: 12pt \"Fixedsys\""
+                                      "font: 12pt \"Fixedsys\";}\n"
+                                      "QPushButton:hover { background-color: #8c7ae6; }"
                                       "")
         software_button.setObjectName("soft_button")
         software_button.setText("Программное\n"
@@ -131,10 +135,11 @@ class MainWindow(QMainWindow):
         internet_button.setLayoutDirection(
             QtCore.Qt.LayoutDirection.LeftToRight)
         internet_button.setAutoFillBackground(False)
-        internet_button.setStyleSheet("border: 1px solid #dfe6e9;\n"
+        internet_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                       "background-color: #a29bfe;\n"
                                       "border-radius: 5px;\n"
-                                      "font: 12pt \"Fixedsys\""
+                                      "font: 12pt \"Fixedsys\";}\n"
+                                      "QPushButton:hover { background-color: #8c7ae6; }"
                                       "")
         internet_button.setObjectName("internet_button")
         internet_button.setText("Интернет")
@@ -153,7 +158,7 @@ class MainWindow(QMainWindow):
 
         gallows_picture = QLabel(self.hardware_widget)
         gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
-        pixmap_gallow = QPixmap("src/stages_with_bg/stage_4(1).png")
+        pixmap_gallow = QPixmap("src/stages_with_bg/stage_4.png")
         gallows_picture.setPixmap(pixmap_gallow)
         self.resize(pixmap_gallow.width(), pixmap_gallow.height())
         # gallows_picture.setStyleSheet("border-radius:5px") - подправить
@@ -184,13 +189,15 @@ class MainWindow(QMainWindow):
             for key in row:
                 button_keyboard = QPushButton(key)
                 key_row.addWidget(button_keyboard)
-                button_keyboard.setStyleSheet("border: 1px solid #dfe6e9;\n"
+                button_keyboard.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                               "background-color: #a29bfe;\n"
                                               "border-radius: 5px;\n"
-                                              "font: 20pt \"Fixedsys\""
+                                              "font: 20pt \"Fixedsys\";}\n"
+                                              "QPushButton:hover { background-color: #8c7ae6; }"
                                               "")
                 button_keyboard.setCursor(QtGui.QCursor(
                     QtCore.Qt.CursorShape.PointingHandCursor))
+
             keyboard_layout.addLayout(key_row)
 
         self.setCentralWidget(self.hardware_widget)
