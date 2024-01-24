@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout,QHBoxLayout
 from PyQt6.QtGui import QPixmap
 from PyQt6 import QtCore, QtGui, QtWidgets
 from translator import translate_start
@@ -27,7 +27,6 @@ class MainWindow(QMainWindow):
         # установка изображения
         self.label_flag = QLabel(self)
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
-        self.label_flag.setObjectName("label_flag")
         self.image_paths = ['src/language/RF.png', 'src/language/UK.png']
         self.current_image_index = 0
         self.loadImage()
@@ -152,20 +151,44 @@ class MainWindow(QMainWindow):
         self.hardware_widget = QWidget(self)
         self.hardware_widget.setObjectName("hardware_widget")
 
-        name_game = QLabel(self.hardware_widget)
-        name_game.setGeometry(QtCore.QRect(310, 100, 100, 20))
-        name_game.setStyleSheet("font-size: 20pt;")
-        name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        name_game.setObjectName("name_game")
-        name_game.setText("Игра")
+        gallows_picture = QLabel(self.hardware_widget)
+        gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
+        pixmap_gallow = QPixmap("src/stages_with_bg/stage_4.png")
+        gallows_picture.setPixmap(pixmap_gallow)
+        self.resize(pixmap_gallow.width(), pixmap_gallow.height())
+        gallows_picture.setObjectName("gallow_picture")
+
+        english_keys = [
+            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+            ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+        ]
+
+        russian_keys = [
+            ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З','Х','Ъ'],
+            ['Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э'],
+            ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю']
+        ]
+
+        if self.current_image_index == 0:
+            keyboard = russian_keys
+        else:
+            keyboard = english_keys
+        label_keyboard = QLabel(self.hardware_widget)
+        label_keyboard.setGeometry(QtCore.QRect(10, 316, 701, 151))
+        keyboard_layout = QVBoxLayout(label_keyboard)
+        
+        for row in keyboard:
+            key_row = QHBoxLayout() 
+            for key in row:
+                button_keyboard = QPushButton(key)
+                key_row.addWidget(button_keyboard)
+                
+            
+            keyboard_layout.addLayout(key_row)
+        
 
         self.setCentralWidget(self.hardware_widget)
-
-        # if self.current_image_index != 0:
-        #     name_cat.setText("Category")
-        #     hardware_button.setText("Hardware")
-        #     software_button.setText("Software")
-        #     internet_button.setText("Internet")
 
     # def start_again(self):
     #     self.category_widget.hide()
