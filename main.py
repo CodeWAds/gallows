@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout,QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout, QHBoxLayout
 from PyQt6.QtGui import QPixmap
 from PyQt6 import QtCore, QtGui, QtWidgets
 from translator import translate_start
@@ -153,9 +153,10 @@ class MainWindow(QMainWindow):
 
         gallows_picture = QLabel(self.hardware_widget)
         gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
-        pixmap_gallow = QPixmap("src/stages_with_bg/stage_4.png")
+        pixmap_gallow = QPixmap("src/stages_with_bg/stage_4(1).png")
         gallows_picture.setPixmap(pixmap_gallow)
         self.resize(pixmap_gallow.width(), pixmap_gallow.height())
+        # gallows_picture.setStyleSheet("border-radius:5px") - подправить
         gallows_picture.setObjectName("gallow_picture")
 
         english_keys = [
@@ -165,7 +166,7 @@ class MainWindow(QMainWindow):
         ]
 
         russian_keys = [
-            ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З','Х','Ъ'],
+            ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ'],
             ['Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э'],
             ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю']
         ]
@@ -177,16 +178,20 @@ class MainWindow(QMainWindow):
         label_keyboard = QLabel(self.hardware_widget)
         label_keyboard.setGeometry(QtCore.QRect(10, 316, 701, 151))
         keyboard_layout = QVBoxLayout(label_keyboard)
-        
+
         for row in keyboard:
-            key_row = QHBoxLayout() 
+            key_row = QHBoxLayout()
             for key in row:
                 button_keyboard = QPushButton(key)
                 key_row.addWidget(button_keyboard)
-                
-            
+                button_keyboard.setStyleSheet("border: 1px solid #dfe6e9;\n"
+                                              "background-color: #a29bfe;\n"
+                                              "border-radius: 5px;\n"
+                                              "font: 20pt \"Fixedsys\""
+                                              "")
+                button_keyboard.setCursor(QtGui.QCursor(
+                    QtCore.Qt.CursorShape.PointingHandCursor))
             keyboard_layout.addLayout(key_row)
-        
 
         self.setCentralWidget(self.hardware_widget)
 
