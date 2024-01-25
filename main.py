@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout, QHBoxLayout
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui, QtWidgets
 from translator import translate_start
 
@@ -24,13 +24,17 @@ class MainWindow(QMainWindow):
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
 
-        # установка изображения
+        # установка изображения языка
         self.label_flag = QLabel(self)
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
         self.image_paths = ['src/language/RF.png', 'src/language/UK.png']
         self.current_image_index = 0
         self.loadImage()
         self.label_flag.setObjectName("label_flag")
+
+        # иконка
+        icon = QIcon("src/stages_with_bg/stage_6.png")
+        self.setWindowIcon(icon)
 
         self.name_game = QLabel(self)
         self.name_game.setGeometry(QtCore.QRect(310, 100, 100, 20))
@@ -158,10 +162,9 @@ class MainWindow(QMainWindow):
 
         gallows_picture = QLabel(self.hardware_widget)
         gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
-        pixmap_gallow = QPixmap("src/stages_with_bg/stage_4.png")
+        pixmap_gallow = QPixmap("src/stages_with_bg/stage_0.png")
         gallows_picture.setPixmap(pixmap_gallow)
         self.resize(pixmap_gallow.width(), pixmap_gallow.height())
-        # gallows_picture.setStyleSheet("border-radius:5px") - подправить
         gallows_picture.setObjectName("gallow_picture")
 
         english_keys = [
@@ -206,7 +209,6 @@ class MainWindow(QMainWindow):
     #     self.category_widget.hide()
 
     def loadImage(self):
-        # Загружаем изображение в QPixmap
         pixmap = QPixmap(self.image_paths[self.current_image_index])
         self.label_flag.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
