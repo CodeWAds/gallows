@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout, QHBoxLayout
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtMultimedia import QMediaPlayer
+from PyQt6.QtMultimedia import *
 from PyQt6.QtCore import QUrl
 from translator import translate_start
 
@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.create_window()
+        
 
     def create_window(self):
         self.setObjectName("MainWindow")
@@ -21,11 +22,9 @@ class MainWindow(QMainWindow):
         self.StartMenu()
 
     def StartMenu(self):
-
         # Название игры в окне
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
-
         # установка изображения языка
         self.label_flag = QLabel(self)
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
@@ -44,6 +43,7 @@ class MainWindow(QMainWindow):
         self.name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.name_game.setObjectName("name_game")
         self.name_game.setText("Виселица")
+        
 
         self.lang_button = QPushButton(self)
 
@@ -87,6 +87,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Виселица")
 
     def category_game(self):
+        self.sound_button()
         self.category_widget = QWidget(self)
         self.category_widget.setObjectName("category_widget")
 
@@ -162,6 +163,7 @@ class MainWindow(QMainWindow):
 
 
     def hardware(self):
+        self.sound_button()
         self.hardware_widget = QWidget(self)
         self.hardware_widget.setObjectName("hardware_widget")
         self.game(self.hardware_widget)
@@ -169,6 +171,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.hardware_widget)
     
     def software(self):
+        self.sound_button()
         self.software_widget = QWidget(self)
         self.software_widget.setObjectName("software_widget")
         self.game(self.software_widget)
@@ -176,6 +179,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.software_widget)
 
     def internet(self):
+        self.sound_button()
         self.internet_widget = QWidget(self)
         self.internet_widget.setObjectName("internet_widget")
         self.game(self.internet_widget)
@@ -227,8 +231,14 @@ class MainWindow(QMainWindow):
                     QtCore.Qt.CursorShape.PointingHandCursor))
 
             keyboard_layout.addLayout(key_row)
-
-       
+            
+    def sound_button(self):
+        self.player = QMediaPlayer()
+        self.audioOutput = QAudioOutput()
+        self.player.setAudioOutput(self.audioOutput)
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
+        self.audioOutput.setVolume(50)
+        self.player.play()  
 
     # def start_again(self):
     #     self.category_widget.hide()
@@ -239,6 +249,7 @@ class MainWindow(QMainWindow):
         self.resize(pixmap.width(), pixmap.height())
 
     def change_lang(self):
+        self.sound_button()
         self.current_image_index = (
             self.current_image_index + 1) % len(self.image_paths)
         self.loadImage()
@@ -255,7 +266,6 @@ class MainWindow(QMainWindow):
             self.lang_button.setText(translate_start["Сменить\n"
                                                      "язык"])
             self.setWindowTitle(translate_start["Виселица"])
-
 
 app = QApplication(sys.argv)
 window = MainWindow()
