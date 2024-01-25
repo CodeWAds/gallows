@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout, QHBoxLayout
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtMultimedia import QMediaPlayer
+from PyQt6.QtCore import QUrl
 from translator import translate_start
 
 import sys
@@ -130,6 +132,7 @@ class MainWindow(QMainWindow):
         software_button.setObjectName("soft_button")
         software_button.setText("Программное\n"
                                 "обеспечение")
+        software_button.clicked.connect(self.software)
 
         internet_button = QPushButton(self.category_widget)
 
@@ -147,6 +150,7 @@ class MainWindow(QMainWindow):
                                       "")
         internet_button.setObjectName("internet_button")
         internet_button.setText("Интернет")
+        internet_button.clicked.connect(self.internet)
 
         self.setCentralWidget(self.category_widget)
 
@@ -156,11 +160,32 @@ class MainWindow(QMainWindow):
             software_button.setText("Software")
             internet_button.setText("Internet")
 
+
     def hardware(self):
         self.hardware_widget = QWidget(self)
         self.hardware_widget.setObjectName("hardware_widget")
+        self.game(self.hardware_widget)
 
-        gallows_picture = QLabel(self.hardware_widget)
+        self.setCentralWidget(self.hardware_widget)
+    
+    def software(self):
+        self.software_widget = QWidget(self)
+        self.software_widget.setObjectName("software_widget")
+        self.game(self.software_widget)
+
+        self.setCentralWidget(self.software_widget)
+
+    def internet(self):
+        self.internet_widget = QWidget(self)
+        self.internet_widget.setObjectName("internet_widget")
+        self.game(self.internet_widget)
+
+        self.setCentralWidget(self.internet_widget)
+
+
+    def game(self,widget):
+        
+        gallows_picture = QLabel(widget)
         gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
         pixmap_gallow = QPixmap("src/stages_with_bg/stage_0.png")
         gallows_picture.setPixmap(pixmap_gallow)
@@ -183,7 +208,7 @@ class MainWindow(QMainWindow):
             keyboard = russian_keys
         else:
             keyboard = english_keys
-        label_keyboard = QLabel(self.hardware_widget)
+        label_keyboard = QLabel(widget)
         label_keyboard.setGeometry(QtCore.QRect(10, 316, 701, 151))
         keyboard_layout = QVBoxLayout(label_keyboard)
 
@@ -203,7 +228,7 @@ class MainWindow(QMainWindow):
 
             keyboard_layout.addLayout(key_row)
 
-        self.setCentralWidget(self.hardware_widget)
+       
 
     # def start_again(self):
     #     self.category_widget.hide()
