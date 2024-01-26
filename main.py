@@ -2,7 +2,8 @@ from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWid
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtMultimedia import *
-from PyQt6.QtCore import QUrl
+from PyQt6.QtCore import QUrl, QTimer
+import time
 from translator import translate_start
 
 import sys
@@ -12,13 +13,12 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.create_window()
-        
 
     def create_window(self):
         self.setObjectName("MainWindow")
         self.setFixedSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
-                           "font: 16pt \"Fixedsys\"")
+                           "font: 14pt \"Comic Sans MS\"")
         self.StartMenu()
 
     def StartMenu(self):
@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
         self.image_paths = ['src/language/RF.png', 'src/language/UK.png']
         self.current_image_index = 0
-        self.loadImage()
+        self.load_image()
         self.label_flag.setObjectName("label_flag")
 
         # иконка
@@ -38,12 +38,11 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(icon)
 
         self.name_game = QLabel(self)
-        self.name_game.setGeometry(QtCore.QRect(310, 100, 100, 20))
-        self.name_game.setStyleSheet("font-size: 20pt;")
+        self.name_game.setGeometry(QtCore.QRect(280, 100, 160, 50))
+        self.name_game.setStyleSheet("font-size: 25pt;")
         self.name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.name_game.setObjectName("name_game")
         self.name_game.setText("Виселица")
-        
 
         self.lang_button = QPushButton(self)
 
@@ -56,7 +55,7 @@ class MainWindow(QMainWindow):
         self.lang_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                        "background-color: #a29bfe;\n"
                                        "border-radius: 5px;\n"
-                                       "font: 12pt \"Fixedsys\";}\n"
+                                       "font: 7pt \"Comic Sans MS\";}\n"
                                        "QPushButton:hover { background-color: #8c7ae6; }"
                                        "")
         self.lang_button.setObjectName("lang_button")
@@ -75,7 +74,8 @@ class MainWindow(QMainWindow):
         self.start_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                         "background-color: #a29bfe;\n"
                                         "border-radius: 5px;\n"
-                                        "padding: 50px;}\n"
+                                        "padding: 50px;\n"
+                                        "font: 13pt Comic Sans MS}"
                                         "QPushButton:hover { background-color: #8c7ae6; }"
                                         "")
         self.start_button.setObjectName("start_button")
@@ -91,12 +91,12 @@ class MainWindow(QMainWindow):
         self.category_widget = QWidget(self)
         self.category_widget.setObjectName("category_widget")
 
-        name_cat = QLabel(self.category_widget)
-        name_cat.setGeometry(QtCore.QRect(310, 100, 100, 20))
-        name_cat.setStyleSheet("font-size: 20pt;")
-        name_cat.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        name_cat.setObjectName("name_game")
-        name_cat.setText("Категория")
+        name_category = QLabel(self.category_widget)
+        name_category.setGeometry(QtCore.QRect(280, 100, 160, 50))
+        name_category.setStyleSheet("font-size: 25pt;")
+        name_category.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        name_category.setObjectName("name_game")
+        name_category.setText("Категория")
 
         hardware_button = QPushButton(self.category_widget)
         hardware_button.setGeometry(QtCore.QRect(140, 260, 147, 39))
@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
         hardware_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                       "background-color: #a29bfe;\n"
                                       "border-radius: 5px;\n"
-                                      "font: 12pt \"Fixedsys\";}\n"
+                                      "font: 10pt \"Comic Sans MS\";}\n"
                                       "QPushButton:hover { background-color:#8c7ae6; }"
                                       "")
         hardware_button.setObjectName("hardware_button")
@@ -127,7 +127,7 @@ class MainWindow(QMainWindow):
         software_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                       "background-color: #a29bfe;\n"
                                       "border-radius: 5px;\n"
-                                      "font: 12pt \"Fixedsys\";}\n"
+                                      "font: 10pt \"Comic Sans MS\";}\n"
                                       "QPushButton:hover { background-color: #8c7ae6; }"
                                       "")
         software_button.setObjectName("soft_button")
@@ -146,7 +146,7 @@ class MainWindow(QMainWindow):
         internet_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                       "background-color: #a29bfe;\n"
                                       "border-radius: 5px;\n"
-                                      "font: 12pt \"Fixedsys\";}\n"
+                                      "font: 10pt \"Comic Sans MS\";}\n"
                                       "QPushButton:hover { background-color: #8c7ae6; }"
                                       "")
         internet_button.setObjectName("internet_button")
@@ -156,11 +156,10 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.category_widget)
 
         if self.current_image_index != 0:
-            name_cat.setText("Category")
+            name_category.setText("Category")
             hardware_button.setText("Hardware")
             software_button.setText("Software")
             internet_button.setText("Internet")
-
 
     def hardware(self):
         self.sound_button()
@@ -169,7 +168,7 @@ class MainWindow(QMainWindow):
         self.game(self.hardware_widget)
 
         self.setCentralWidget(self.hardware_widget)
-    
+
     def software(self):
         self.sound_button()
         self.software_widget = QWidget(self)
@@ -186,9 +185,8 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.internet_widget)
 
+    def game(self, widget):
 
-    def game(self,widget):
-        
         gallows_picture = QLabel(widget)
         gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
         pixmap_gallow = QPixmap("src/stages_with_bg/stage_0.png")
@@ -224,26 +222,41 @@ class MainWindow(QMainWindow):
                 button_keyboard.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                               "background-color: #a29bfe;\n"
                                               "border-radius: 5px;\n"
-                                              "font: 20pt \"Fixedsys\";}\n"
+                                              "font: 10pt \"Comic Sans MS\";}\n"
                                               "QPushButton:hover { background-color: #8c7ae6; }"
                                               "")
                 button_keyboard.setCursor(QtGui.QCursor(
                     QtCore.Qt.CursorShape.PointingHandCursor))
 
             keyboard_layout.addLayout(key_row)
-            
+        label_keyboard.setObjectName("label_keyboard")
+
+        open_word = QLabel(widget)
+        open_word.setGeometry(QtCore.QRect(320, 90, 391, 41))
+        open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        open_word.setStyleSheet("font-size: 20pt;")
+        open_word.setText("OPEN WORD")
+        open_word.setObjectName("open_word")
+
+        hidden_word = QLabel(widget)
+        hidden_word.setGeometry(QtCore.QRect(320, 200, 391, 41))
+        hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        hidden_word.setStyleSheet("font-size: 20pt;")
+        hidden_word.setText("_ _ _ _ _ _ _ _")
+        hidden_word.setObjectName("hidden_word")
+
     def sound_button(self):
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
         self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
         self.audioOutput.setVolume(50)
-        self.player.play()  
+        self.player.play()
 
     # def start_again(self):
     #     self.category_widget.hide()
 
-    def loadImage(self):
+    def load_image(self):
         pixmap = QPixmap(self.image_paths[self.current_image_index])
         self.label_flag.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
@@ -252,7 +265,7 @@ class MainWindow(QMainWindow):
         self.sound_button()
         self.current_image_index = (
             self.current_image_index + 1) % len(self.image_paths)
-        self.loadImage()
+        self.load_image()
         if self.current_image_index == 0:
             self.start_button.setText("СТАРТ")
             self.name_game.setText("Виселица")
@@ -266,6 +279,7 @@ class MainWindow(QMainWindow):
             self.lang_button.setText(translate_start["Сменить\n"
                                                      "язык"])
             self.setWindowTitle(translate_start["Виселица"])
+
 
 app = QApplication(sys.argv)
 window = MainWindow()

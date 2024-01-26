@@ -47,6 +47,32 @@ font: 16pt &quot;Fixedsys&quot;</string>
      <string>PushButton</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>90</y>
+      <width>391</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OPEN WORD</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>200</y>
+      <width>391</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OPEN WORD</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
