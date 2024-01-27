@@ -8,25 +8,6 @@ import translator
 
 import sys
 
-
-class AdditionalWindow(QDialog):
-    def __init__(self):
-        super().__init__()
-
-        # Установите необходимый макет для дополнительного окна
-        layout = QVBoxLayout()
-
-        # Добавьте виджеты и элементы управления в дополнительное окно
-        button = QPushButton('Закрыть', self)
-        button.clicked.connect(self.close)
-
-        # Добавьте элементы управления в макет
-        layout.addWidget(button)
-
-        # Установите макет в дополнительное окно
-        self.setLayout(layout)
-
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -299,22 +280,22 @@ class MainWindow(QMainWindow):
         self.player.play()
 
     def show_popup(self, result_game):
-        popup_game = QMessageBox()
+        popup_game = QMessageBox(self)
         if result_game == "win":
             title = "Победа!"
             text_popup = "Поздравляем! Вы выиграли!"
         else:
             title = "Поражение!"
             text_popup = "Увы! Вы проиграли!"
-
         popup_game.setWindowTitle(title)
         popup_game.setText(text_popup)
         popup_game.setWindowIcon(QIcon("src/stages_with_bg/stage_6.png"))
-        popup_game.setIcon(QUrl("src/stages_with_bg/stage_6.png"))
-        popup_game.addButton('Вернуться в меню', QMessageBox.ButtonRole.AcceptRole)
+
+        popup_game.addButton('Вернуться в меню',QMessageBox.ButtonRole.AcceptRole)
+        
 
         popup_game.exec()
-        
+
         self.widget.hide()
 
     def generate_open_word(self):
@@ -343,7 +324,7 @@ class MainWindow(QMainWindow):
         self.guess = sender.text()
         self.guess_letter = self.guess.lower()
         sender.setEnabled(False)
-        # print(self.guess_letter)
+
         if self.guess_letter in self._word_hide:
             for i, letter in enumerate(self._word_hide):
                 if letter == self.guess_letter:
@@ -362,9 +343,6 @@ class MainWindow(QMainWindow):
             self.sound_game_over()
             self.result_game = "over"
             self.show_popup(self.result_game)
-
-    # def start_again(self):
-    #     self.category_widget.hide()
 
     def load_image(self):
         pixmap = QPixmap(self.image_paths[self.lang_index])
