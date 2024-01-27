@@ -11,7 +11,7 @@ class CustomDialog(QDialog):
 
         label_text = QLabel(text)
         layout.addWidget(label_text)
-
+        
         pixmap = QPixmap(image_path)
         label_image = QLabel()
         label_image.setPixmap(pixmap)

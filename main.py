@@ -8,6 +8,7 @@ import translator
 
 import sys
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -241,16 +242,16 @@ class MainWindow(QMainWindow):
             self.keyboard_layout.addLayout(key_row)
         self.label_keyboard.setObjectName("label_keyboard")
         open_word = QLabel(widget)
-        open_word.setGeometry(QtCore.QRect(320, 90, 391, 41))
+        open_word.setGeometry(QtCore.QRect(320, 20, 391, 121))
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         open_word.setStyleSheet("font-size: 17pt;")
         open_word.setText(self.word_shown)
         open_word.setObjectName("open_word")
 
         self.hidden_word = QLabel(widget)
-        self.hidden_word.setGeometry(QtCore.QRect(320, 200, 391, 41))
+        self.hidden_word.setGeometry(QtCore.QRect(320, 160, 391, 121))
         self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.hidden_word.setStyleSheet("font-size: 15pt;")
+        self.hidden_word.setStyleSheet("font-size: 13pt;")
         self.hidden_word.setText(" ".join(self.word_hide))
         self.hidden_word.setObjectName("hidden_word")
         self.make_guess()
@@ -280,23 +281,47 @@ class MainWindow(QMainWindow):
         self.player.play()
 
     def show_popup(self, result_game):
-        popup_game = QMessageBox(self)
+        self.popup_game = QDialog(self)
         if result_game == "win":
             title = "Победа!"
             text_popup = "Поздравляем! Вы выиграли!"
         else:
             title = "Поражение!"
             text_popup = "Увы! Вы проиграли!"
-        popup_game.setWindowTitle(title)
-        popup_game.setText(text_popup)
-        popup_game.setWindowIcon(QIcon("src/stages_with_bg/stage_6.png"))
+            label_true_answer = QLabel(self.popup_game)
+            label_true_answer.setGeometry(QtCore.QRect(0, 10, 480, 50))
+            label_true_answer.setStyleSheet("font-size: 10pt")
+            label_true_answer.setText(f"{text_popup}\n Правильный ответ: {self._word_hide}")
+            label_true_answer.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            
+        self.popup_game.setWindowTitle(title)
+        self.popup_game.setWindowIcon(QIcon("src/stages_with_bg/stage_6.png"))
+        self.popup_game.setFixedSize(480, 150)
 
-        popup_game.addButton('Вернуться в меню',QMessageBox.ButtonRole.AcceptRole)
+        label_text = QLabel(self.popup_game)
+        label_text.setGeometry(QtCore.QRect(180, 100, 480, 50))
         
+        pixmap = QPixmap("src/cat_over.png")
+        label_image = QLabel(self.popup_game)
+        label_image.setGeometry(QtCore.QRect(20, 30, 54, 54))
+        label_image.setPixmap(pixmap)
+        label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        button_ok = QPushButton('Вернуться в меню', label_text)
+        button_ok.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+                                "background-color: #a29bfe;\n"
+                                "padding: 5px;\n"
+                                "border-radius: 5px;\n"
+                                "font: 10pt \"Comic Sans MS\";}\n"
+                                "QPushButton:hover { background-color: #8c7ae6; }"
+                                "")
+        button_ok.clicked.connect(self.return_to_menu)
+        self.popup_game.exec()
+       
 
-        popup_game.exec()
-
+    def return_to_menu(self):
+        self.popup_game.hide()
         self.widget.hide()
+        
 
     def generate_open_word(self):
         if self.category_words == 1:
@@ -314,7 +339,9 @@ class MainWindow(QMainWindow):
         self.word_hide = []
         for i in self._word_hide:
             if i == " ":
-                self.word_hide.append(" ")
+                self.word_hide.append("\n")
+            elif i == "-":
+                self.word_hide.append("-")
             else:
                 self.word_hide.append("_")
 

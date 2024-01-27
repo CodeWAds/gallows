@@ -37,10 +37,10 @@ font: 16pt &quot;Fixedsys&quot;</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>301</width>
-      <height>281</height>
+      <x>20</x>
+      <y>30</y>
+      <width>111</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="text">
