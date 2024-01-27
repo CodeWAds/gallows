@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWid
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtMultimedia import *
-from PyQt6.QtCore import QUrl, QTimer
-import time
-from translator import translate_start
+from PyQt6.QtCore import QUrl
+import random
+import translator
 
 import sys
 
@@ -165,6 +165,8 @@ class MainWindow(QMainWindow):
         self.sound_button()
         self.hardware_widget = QWidget(self)
         self.hardware_widget.setObjectName("hardware_widget")
+        self.category_words = 1
+        self.generate_word()
         self.game(self.hardware_widget)
 
         self.setCentralWidget(self.hardware_widget)
@@ -173,6 +175,8 @@ class MainWindow(QMainWindow):
         self.sound_button()
         self.software_widget = QWidget(self)
         self.software_widget.setObjectName("software_widget")
+        self.category_words = 2
+        self.generate_word()
         self.game(self.software_widget)
 
         self.setCentralWidget(self.software_widget)
@@ -181,6 +185,8 @@ class MainWindow(QMainWindow):
         self.sound_button()
         self.internet_widget = QWidget(self)
         self.internet_widget.setObjectName("internet_widget")
+        self.category_words = 3
+        self.generate_word()
         self.game(self.internet_widget)
 
         self.setCentralWidget(self.internet_widget)
@@ -230,12 +236,11 @@ class MainWindow(QMainWindow):
 
             keyboard_layout.addLayout(key_row)
         label_keyboard.setObjectName("label_keyboard")
-
         open_word = QLabel(widget)
         open_word.setGeometry(QtCore.QRect(320, 90, 391, 41))
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         open_word.setStyleSheet("font-size: 20pt;")
-        open_word.setText("OPEN WORD")
+        open_word.setText(self.word_shown)
         open_word.setObjectName("open_word")
 
         hidden_word = QLabel(widget)
@@ -252,6 +257,20 @@ class MainWindow(QMainWindow):
         self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
         self.audioOutput.setVolume(50)
         self.player.play()
+
+    def generate_word(self):
+        if self.category_words == 1:
+            _words = translator.words_hardware_ru
+        elif self.category_words == 2:
+            _words = translator.words_software_ru
+        else:
+            _words = translator.words_internet_ru
+        word_of_items = list(_words.items())
+        s = random.randint(0,len(_words)-1)
+        self.word_shown = word_of_items[s][0]
+       
+
+
 
     # def start_again(self):
     #     self.category_widget.hide()
@@ -274,11 +293,11 @@ class MainWindow(QMainWindow):
             self.setWindowTitle("Виселица")
 
         else:
-            self.start_button.setText(translate_start["СТАРТ"])
-            self.name_game.setText(translate_start["Виселица"])
-            self.lang_button.setText(translate_start["Сменить\n"
+            self.start_button.setText(translator.translate_start["СТАРТ"])
+            self.name_game.setText(translator.translate_start["Виселица"])
+            self.lang_button.setText(translator.translate_start["Сменить\n"
                                                      "язык"])
-            self.setWindowTitle(translate_start["Виселица"])
+            self.setWindowTitle(translator.translate_start["Виселица"])
 
 
 app = QApplication(sys.argv)

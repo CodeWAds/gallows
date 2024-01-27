@@ -6,7 +6,7 @@ class HangmanGame(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.word_to_guess = "PYQT6"  # Слово для угадывания
+        self.word_to_guess = "KITTY"  # Слово для угадывания
         self.guess_word = ["_"] * len(self.word_to_guess)  # Слово, которое отображается пользователю
 
         self.attempts_left = 6  # Количество попыток
