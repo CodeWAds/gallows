@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         self.label_flag = QLabel(self)
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
         self.image_paths = ['src/language/RF.png', 'src/language/UK.png']
-        self.current_image_index = 0
+        self.lang_index = 0
         self.load_image()
         self.label_flag.setObjectName("label_flag")
 
@@ -155,7 +155,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.category_widget)
 
-        if self.current_image_index != 0:
+        if self.lang_index != 0:
             name_category.setText("Category")
             hardware_button.setText("Hardware")
             software_button.setText("Software")
@@ -166,7 +166,8 @@ class MainWindow(QMainWindow):
         self.hardware_widget = QWidget(self)
         self.hardware_widget.setObjectName("hardware_widget")
         self.category_words = 1
-        self.generate_word()
+        self.generate_open_word()
+        self.generate_hidden_word()
         self.game(self.hardware_widget)
 
         self.setCentralWidget(self.hardware_widget)
@@ -176,7 +177,8 @@ class MainWindow(QMainWindow):
         self.software_widget = QWidget(self)
         self.software_widget.setObjectName("software_widget")
         self.category_words = 2
-        self.generate_word()
+        self.generate_open_word()
+        self.generate_hidden_word()
         self.game(self.software_widget)
 
         self.setCentralWidget(self.software_widget)
@@ -186,7 +188,8 @@ class MainWindow(QMainWindow):
         self.internet_widget = QWidget(self)
         self.internet_widget.setObjectName("internet_widget")
         self.category_words = 3
-        self.generate_word()
+        self.generate_open_word()
+        self.generate_hidden_word()
         self.game(self.internet_widget)
 
         self.setCentralWidget(self.internet_widget)
@@ -212,7 +215,7 @@ class MainWindow(QMainWindow):
             ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю']
         ]
 
-        if self.current_image_index == 0:
+        if self.lang_index == 0:
             keyboard = russian_keys
         else:
             keyboard = english_keys
@@ -247,7 +250,7 @@ class MainWindow(QMainWindow):
         hidden_word.setGeometry(QtCore.QRect(320, 200, 391, 41))
         hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         hidden_word.setStyleSheet("font-size: 20pt;")
-        hidden_word.setText("_ _ _ _ _ _ _ _")
+        hidden_word.setText(" ".join(self.word_hide))
         hidden_word.setObjectName("hidden_word")
 
     def sound_button(self):
@@ -258,34 +261,41 @@ class MainWindow(QMainWindow):
         self.audioOutput.setVolume(50)
         self.player.play()
 
-    def generate_word(self):
+    def generate_open_word(self):
         if self.category_words == 1:
-            _words = translator.words_hardware_ru
+            _words = translator.words_hardware
         elif self.category_words == 2:
-            _words = translator.words_software_ru
+            _words = translator.words_software
         else:
-            _words = translator.words_internet_ru
-        word_of_items = list(_words.items())
-        s = random.randint(0,len(_words)-1)
-        self.word_shown = word_of_items[s][0]
+            _words = translator.words_internet
+        self.word_of_items = list(_words.items())
+        self.random_index = random.randint(0,len(_words))
+        self.word_shown = self.word_of_items[self.random_index][self.lang_index]
        
 
-
-
+    def generate_hidden_word(self):
+        _word_hide = self.word_of_items[self.random_index][self.lang_index-1]
+        # self.word_hide = ["_ "] * len(_word_hide)
+        self.word_hide = []
+        for i in _word_hide:
+            if i == " ":
+                self.word_hide.append(" ")
+            else:
+                self.word_hide.append("_")
     # def start_again(self):
     #     self.category_widget.hide()
 
     def load_image(self):
-        pixmap = QPixmap(self.image_paths[self.current_image_index])
+        pixmap = QPixmap(self.image_paths[self.lang_index])
         self.label_flag.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
 
     def change_lang(self):
         self.sound_button()
-        self.current_image_index = (
-            self.current_image_index + 1) % len(self.image_paths)
+        self.lang_index = (
+            self.lang_index + 1) % len(self.image_paths)
         self.load_image()
-        if self.current_image_index == 0:
+        if self.lang_index == 0:
             self.start_button.setText("СТАРТ")
             self.name_game.setText("Виселица")
             self.lang_button.setText("Сменить\n"

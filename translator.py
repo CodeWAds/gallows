@@ -6,7 +6,7 @@ translate_start = {
     "Виселица": "Gallows",
 }
 
-words_hardware_ru = {
+words_hardware = {
     "bus": "шина",
     "cable": "кабель",
     "central processing unit (CPU)": "центральный процессор",
@@ -45,7 +45,7 @@ words_hardware_ru = {
     "joystick": "джойстик"
 }
 
-words_software_ru = {
+words_software = {
     "compiler": "компилятор",
     "database": "база данных",
     "debugger": "отладчик",
@@ -103,7 +103,7 @@ words_software_ru = {
     "waterfall model": "каскадная модель разработки"
 }
 
-words_internet_ru = {
+words_internet = {
     "bookmark": "закладка (в браузере)",
     "bridge": "мост",
     "browser": "браузер, обозреватель",
