@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout, QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout, QHBoxLayout, QDialog,  QMessageBox
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtMultimedia import *
@@ -7,6 +7,24 @@ import random
 import translator
 
 import sys
+
+
+class AdditionalWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        # Установите необходимый макет для дополнительного окна
+        layout = QVBoxLayout()
+
+        # Добавьте виджеты и элементы управления в дополнительное окно
+        button = QPushButton('Закрыть', self)
+        button.clicked.connect(self.close)
+
+        # Добавьте элементы управления в макет
+        layout.addWidget(button)
+
+        # Установите макет в дополнительное окно
+        self.setLayout(layout)
 
 
 class MainWindow(QMainWindow):
@@ -195,13 +213,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.internet_widget)
 
     def game(self, widget):
-
-        gallows_picture = QLabel(widget)
-        gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
+        self.widget = widget
+        self.attempts_left = -1
+        self.gallows_picture = QLabel(widget)
+        self.gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
         pixmap_gallow = QPixmap("src/stages_with_bg/stage_0.png")
-        gallows_picture.setPixmap(pixmap_gallow)
+        self.gallows_picture.setPixmap(pixmap_gallow)
         self.resize(pixmap_gallow.width(), pixmap_gallow.height())
-        gallows_picture.setObjectName("gallow_picture")
+        self.gallows_picture.setObjectName("gallow_picture")
 
         english_keys = [
             ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -219,9 +238,9 @@ class MainWindow(QMainWindow):
             keyboard = russian_keys
         else:
             keyboard = english_keys
-        label_keyboard = QLabel(widget)
-        label_keyboard.setGeometry(QtCore.QRect(10, 316, 701, 151))
-        keyboard_layout = QVBoxLayout(label_keyboard)
+        self.label_keyboard = QLabel(widget)
+        self.label_keyboard.setGeometry(QtCore.QRect(10, 316, 701, 151))
+        self.keyboard_layout = QVBoxLayout(self.label_keyboard)
 
         for row in keyboard:
             key_row = QHBoxLayout()
@@ -236,22 +255,24 @@ class MainWindow(QMainWindow):
                                               "")
                 button_keyboard.setCursor(QtGui.QCursor(
                     QtCore.Qt.CursorShape.PointingHandCursor))
+                button_keyboard.clicked.connect(self.make_guess)
 
-            keyboard_layout.addLayout(key_row)
-        label_keyboard.setObjectName("label_keyboard")
+            self.keyboard_layout.addLayout(key_row)
+        self.label_keyboard.setObjectName("label_keyboard")
         open_word = QLabel(widget)
         open_word.setGeometry(QtCore.QRect(320, 90, 391, 41))
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        open_word.setStyleSheet("font-size: 20pt;")
+        open_word.setStyleSheet("font-size: 17pt;")
         open_word.setText(self.word_shown)
         open_word.setObjectName("open_word")
 
-        hidden_word = QLabel(widget)
-        hidden_word.setGeometry(QtCore.QRect(320, 200, 391, 41))
-        hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        hidden_word.setStyleSheet("font-size: 20pt;")
-        hidden_word.setText(" ".join(self.word_hide))
-        hidden_word.setObjectName("hidden_word")
+        self.hidden_word = QLabel(widget)
+        self.hidden_word.setGeometry(QtCore.QRect(320, 200, 391, 41))
+        self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.hidden_word.setStyleSheet("font-size: 15pt;")
+        self.hidden_word.setText(" ".join(self.word_hide))
+        self.hidden_word.setObjectName("hidden_word")
+        self.make_guess()
 
     def sound_button(self):
         self.player = QMediaPlayer()
@@ -261,6 +282,41 @@ class MainWindow(QMainWindow):
         self.audioOutput.setVolume(50)
         self.player.play()
 
+    def sound_game_over(self):
+        self.player = QMediaPlayer()
+        self.audioOutput = QAudioOutput()
+        self.player.setAudioOutput(self.audioOutput)
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_over.wav"))
+        self.audioOutput.setVolume(50)
+        self.player.play()
+
+    def sound_game_win(self):
+        self.player = QMediaPlayer()
+        self.audioOutput = QAudioOutput()
+        self.player.setAudioOutput(self.audioOutput)
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_win.wav"))
+        self.audioOutput.setVolume(50)
+        self.player.play()
+
+    def show_popup(self, result_game):
+        popup_game = QMessageBox()
+        if result_game == "win":
+            title = "Победа!"
+            text_popup = "Поздравляем! Вы выиграли!"
+        else:
+            title = "Поражение!"
+            text_popup = "Увы! Вы проиграли!"
+
+        popup_game.setWindowTitle(title)
+        popup_game.setText(text_popup)
+        popup_game.setWindowIcon(QIcon("src/stages_with_bg/stage_6.png"))
+        popup_game.setIcon(QUrl("src/stages_with_bg/stage_6.png"))
+        popup_game.addButton('Вернуться в меню', QMessageBox.ButtonRole.AcceptRole)
+
+        popup_game.exec()
+        
+        self.widget.hide()
+
     def generate_open_word(self):
         if self.category_words == 1:
             _words = translator.words_hardware
@@ -269,19 +325,44 @@ class MainWindow(QMainWindow):
         else:
             _words = translator.words_internet
         self.word_of_items = list(_words.items())
-        self.random_index = random.randint(0,len(_words))
+        self.random_index = random.randint(0, len(_words)-1)
         self.word_shown = self.word_of_items[self.random_index][self.lang_index]
-       
 
     def generate_hidden_word(self):
-        _word_hide = self.word_of_items[self.random_index][self.lang_index-1]
-        # self.word_hide = ["_ "] * len(_word_hide)
+        self._word_hide = self.word_of_items[self.random_index][self.lang_index-1]
         self.word_hide = []
-        for i in _word_hide:
+        for i in self._word_hide:
             if i == " ":
                 self.word_hide.append(" ")
             else:
                 self.word_hide.append("_")
+
+    def make_guess(self):
+        self.sound_button()
+        sender = self.sender()
+        self.guess = sender.text()
+        self.guess_letter = self.guess.lower()
+        sender.setEnabled(False)
+        # print(self.guess_letter)
+        if self.guess_letter in self._word_hide:
+            for i, letter in enumerate(self._word_hide):
+                if letter == self.guess_letter:
+                    self.word_hide[i] = self.guess_letter
+            self.hidden_word.setText(" ".join(self.word_hide))
+        else:
+            self.attempts_left += 1
+            pixmap_gallow = QPixmap(
+                f"src/stages_with_bg/stage_{self.attempts_left}.png")
+            self.gallows_picture.setPixmap(pixmap_gallow)
+        if "_" not in self.word_hide:
+            self.sound_game_win()
+            self.result_game = "win"
+            self.show_popup(self.result_game)
+        elif self.attempts_left == 6:
+            self.sound_game_over()
+            self.result_game = "over"
+            self.show_popup(self.result_game)
+
     # def start_again(self):
     #     self.category_widget.hide()
 
@@ -306,11 +387,12 @@ class MainWindow(QMainWindow):
             self.start_button.setText(translator.translate_start["СТАРТ"])
             self.name_game.setText(translator.translate_start["Виселица"])
             self.lang_button.setText(translator.translate_start["Сменить\n"
-                                                     "язык"])
+                                                                "язык"])
             self.setWindowTitle(translator.translate_start["Виселица"])
 
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()
