@@ -97,7 +97,7 @@ words_software = {
 words_internet = {
     "bookmark": "закладка",
     "bridge": "мост",
-    "browser": "браузер, обозреватель",
+    "browser": "браузер",
     "domain": "домен",
     "firewall": "межсетевой экран",
     "gateway": "шлюз",

@@ -152,7 +152,7 @@ class MainWindow(QMainWindow):
         internet_button.setObjectName("internet_button")
         internet_button.setText("Интернет")
         internet_button.clicked.connect(self.internet)
-################################
+
         ai_button = QPushButton(self.category_widget)
 
         ai_button.setGeometry(QtCore.QRect(140, 310, 147, 39))
@@ -171,7 +171,7 @@ class MainWindow(QMainWindow):
         ai_button.setText("Искусственный\n"
                           "интеллект")
         ai_button.clicked.connect(self.ai)
-########################################
+
         design_button = QPushButton(self.category_widget)
 
         design_button.setGeometry(QtCore.QRect(292, 310, 147, 39))
@@ -189,7 +189,7 @@ class MainWindow(QMainWindow):
         design_button.setObjectName("design_button")
         design_button.setText("Дизайн")
         design_button.clicked.connect(self.design)
-############################################
+
         cybersecurity_button = QPushButton(self.category_widget)
 
         cybersecurity_button.setGeometry(QtCore.QRect(444, 310, 147, 39))
@@ -349,12 +349,15 @@ class MainWindow(QMainWindow):
         self.make_guess()
 
     def sound_button(self):
+        self.sender().setEnabled(False)
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
         self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
         self.audioOutput.setVolume(50)
         self.player.play()
+        
+        self.sender().setEnabled(True)
 
     def sound_game_over(self):
         self.player = QMediaPlayer()
@@ -375,19 +378,35 @@ class MainWindow(QMainWindow):
     def show_popup(self, result_game):
         self.popup_game = QDialog(self)
         if result_game == "win":
-            title = "Победа!"
-            text_popup = "Поздравляем! Вы выиграли!"
+            image = "cat_win"
         else:
-            title = "Поражение!"
-            text_popup = "Увы! Вы проиграли!\n"
-            f"Правильный ответ:{self._word_hide}"
-            
+            image = "cat_over"
+
+        if self.lang_index == 0:
+            return_button = "Вернуться в меню"
+            if result_game == "win":
+                title = "Победа!"
+                text_popup = "Поздравляем! Вы выиграли!"
+            else:
+                title = "Поражение!"
+                text_popup = f"""Увы! Вы проиграли!\n
+                    Правильный ответ: {self._word_hide}"""
+        else:
+            return_button = "Return to menu"
+            if result_game == "win":
+                title = "Win"
+                text_popup = "You won!"
+            else:
+                title = "Lose"
+                text_popup = f"""You lose!\n
+                Correct answer: {self._word_hide}"""
+
         self.popup_game.setWindowTitle(title)
         self.popup_game.setWindowIcon(QIcon("src/stages_with_bg/stage_6.png"))
         self.popup_game.setFixedSize(480, 150)
 
         label_answer = QLabel(self.popup_game)
-        label_answer.setGeometry(QtCore.QRect(0, 10, 480, 50))
+        label_answer.setGeometry(QtCore.QRect(0, 10, 480, 60))
         label_answer.setStyleSheet("font-size: 10pt")
         label_answer.setText(text_popup)
         label_answer.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -395,22 +414,24 @@ class MainWindow(QMainWindow):
         label_text = QLabel(self.popup_game)
         label_text.setGeometry(QtCore.QRect(180, 100, 480, 50))
 
-        pixmap = QPixmap("src/cat_win.png")
+        pixmap = QPixmap(f"src/{image}.png")
         label_image = QLabel(self.popup_game)
         label_image.setGeometry(QtCore.QRect(20, 30, 60, 60))
         label_image.setPixmap(pixmap)
         label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        button_ok = QPushButton('Вернуться в меню', label_text)
-        button_ok.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+        self.button_ok = QPushButton('Вернуться в меню', label_text)
+        self.button_ok.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                 "background-color: #a29bfe;\n"
                                 "padding: 5px;\n"
                                 "border-radius: 5px;\n"
                                 "font: 10pt \"Comic Sans MS\";}\n"
                                 "QPushButton:hover { background-color: #8c7ae6; }"
                                 "")
-        button_ok.setCursor(QtGui.QCursor(
+        self.button_ok.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
-        button_ok.clicked.connect(self.return_to_menu)
+        if self.lang_index != 0:
+            self.button_ok.setText(return_button)
+        self.button_ok.clicked.connect(self.return_to_menu)
         self.popup_game.exec()
 
     def return_to_menu(self):
