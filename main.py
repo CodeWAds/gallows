@@ -208,6 +208,25 @@ class MainWindow(QMainWindow):
         cybersecurity_button.setText("Кибербезопасность")
         cybersecurity_button.clicked.connect(self.cybersecurity)
 
+
+        slang_button = QPushButton(self.category_widget)
+        slang_button.setGeometry(QtCore.QRect(140, 360, 450, 39))
+        slang_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        slang_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        slang_button.setAutoFillBackground(False)
+        slang_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+                                      "background-color: #a29bfe;\n"
+                                      "border-radius: 5px;\n"
+                                      "font: 10pt \"Comic Sans MS\";}\n"
+                                      "QPushButton:hover { background-color: #8c7ae6; }"
+                                      "")
+        slang_button.setObjectName("slang_button")
+        slang_button.setText("Сленг\n"
+                                "программистов")
+        slang_button.clicked.connect(self.slang)
+
         self.setCentralWidget(self.category_widget)
 
         if self.lang_index != 0:
@@ -219,6 +238,7 @@ class MainWindow(QMainWindow):
                               "Intelligence")
             design_button.setText("Design")
             cybersecurity_button.setText("Cybersecurity")
+            slang_button.setText("Programmers' slang")
 
     def hardware(self):
         self.sound_button()
@@ -285,6 +305,17 @@ class MainWindow(QMainWindow):
         self.game(self.cybersecurity_widget)
 
         self.setCentralWidget(self.cybersecurity_widget)
+
+    def slang(self):
+        self.sound_button()
+        self.slang_widget = QWidget(self)
+        self.slang_widget.setObjectName("slang_widget")
+        self.category_words = 7
+        self.generate_open_word()
+        self.generate_hidden_word()
+        self.game(self.slang_widget)
+
+        self.setCentralWidget(self.slang_widget)
 
     def game(self, widget):
         self.widget = widget
@@ -454,14 +485,16 @@ class MainWindow(QMainWindow):
             _words = translator.words_ai
         elif self.category_words == 5:
             _words = translator.words_design
-        else:
+        elif self.category_words == 6: 
             _words = translator.words_cybersecurity
+        else:
+            _words = translator.words_slang
         self.word_of_items = list(_words.items())
         self.random_index = random.randint(0, len(_words)-1)
-        self.word_shown = self.word_of_items[23][self.lang_index]
+        self.word_shown = self.word_of_items[self.random_index][self.lang_index]
 
     def generate_hidden_word(self):
-        self._word_hide = self.word_of_items[23][self.lang_index-1]
+        self._word_hide = self.word_of_items[self.random_index][self.lang_index-1]
         self.word_hide = []
         self._word_shown = []
         for i in self._word_hide:

@@ -222,3 +222,9 @@ words_cybersecurity = {
     "security policy": "политика безопасности",
     "security breach": "нарушение безопасности",
 }
+
+words_slang = {
+    "update": "обновление программы",
+    "bug": "ошибка в программе",
+    "branch": "ветвь системы контроля версий",
+}
