@@ -34,7 +34,7 @@ words_hardware = {
     "mouse": "мышь",
     "scanner": "сканер",
     "digital camera": "цифровая камера",
-    "joystick": "джойстик"
+    "joystick": "джойстик",
 }
 
 words_software = {
@@ -91,7 +91,7 @@ words_software = {
     "spyware": "программа-шпион",
     "system software": "системное программное обеспечение",
     "unit testing": "модульное тестирование",
-    "waterfall model": "каскадная модель разработки"
+    "waterfall model": "каскадная модель разработки",
 }
 
 words_internet = {
@@ -126,7 +126,7 @@ words_internet = {
     "peer-to-peer": "одноранговая сеть",
     "twisted pair": "витая пара",
     "voice over ip": "голосовая связь через интернет",
-    "wide area network": "глобальная сеть"
+    "wide area network": "глобальная сеть",
 }
 
 words_ai = {
@@ -159,7 +159,7 @@ words_ai = {
     "cloud computing": "облачные вычисления",
     "ai ethics": "этика искусственного интеллекта",
     "explainable ai": "ии с возможностью объяснения",
-    "ai fairness": "честность искусственного интеллекта"
+    "ai fairness": "честность искусственного интеллекта",
 }
 
 words_design = {
@@ -226,5 +226,23 @@ words_cybersecurity = {
 words_slang = {
     "update": "обновление программы",
     "bug": "ошибка в программе",
-    "branch": "ветвь системы контроля версий",
+    "branch": "ветвь",
+    "debugging": "устранение ошибок",
+    "cache": "кэш",
+    "frontend": "фронтенд",
+    "backend": "бэкенд",
+    "instance": "экземпляр класса в ооп",
+    "call": "рабочий созвон",
+    "commit": "сохранение изменений кода",
+    "load balancer": "балансировка нагрузки",
+    "meeting": "встреча",
+    "merging": "слияние",
+    "offer": "предложение о работе",
+    "mockup": "макет дизайна",
+    "parsing": "сбор и анализ данных",
+    "production": "рабочая версия продукта",
+    "task": "рабочая задача",
+    "feature": "особенность",
+    "hot fix": "Быстрое исправление",
+    "unit": "элемент",
 }
