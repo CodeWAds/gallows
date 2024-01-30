@@ -218,7 +218,6 @@ words_cybersecurity = {
     "denial of service": "отказ в обслуживании",
     "social engineering": "социальная инженерия",
     "patch management": "управление патчами",
-    "security awareness training": "обучение осведомленности в области безопасности",
     "cryptography": "криптография",
     "security policy": "политика безопасности",
     "security breach": "нарушение безопасности",

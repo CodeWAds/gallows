@@ -1,8 +1,8 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QStackedLayout, QHBoxLayout, QDialog,  QMessageBox
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QDialog
 from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui
 from PyQt6.QtMultimedia import *
-from PyQt6.QtCore import QUrl
+from PyQt6.QtCore import QUrl, QTimer
 import random
 import translator
 
@@ -337,7 +337,7 @@ class MainWindow(QMainWindow):
         open_word.setGeometry(QtCore.QRect(320, 20, 391, 121))
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         open_word.setStyleSheet("font-size: 17pt;")
-        open_word.setText(self.word_shown)
+        open_word.setText(" ".join(self._word_shown))
         open_word.setObjectName("open_word")
 
         self.hidden_word = QLabel(widget)
@@ -349,15 +349,20 @@ class MainWindow(QMainWindow):
         self.make_guess()
 
     def sound_button(self):
-        self.sender().setEnabled(False)
+        sender  = self.sender()
+        sender.setEnabled(False)
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
         self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
         self.audioOutput.setVolume(50)
         self.player.play()
-        
-        self.sender().setEnabled(True)
+        timer = QTimer(self)
+        timer.singleShot(500, self.enable_button)
+
+    def enable_button(self):
+        self.lang_button.setEnabled(True)
+        self.start_button.setEnabled(True)
 
     def sound_game_over(self):
         self.player = QMediaPlayer()
@@ -421,12 +426,12 @@ class MainWindow(QMainWindow):
         label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.button_ok = QPushButton('Вернуться в меню', label_text)
         self.button_ok.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
-                                "background-color: #a29bfe;\n"
-                                "padding: 5px;\n"
-                                "border-radius: 5px;\n"
-                                "font: 10pt \"Comic Sans MS\";}\n"
-                                "QPushButton:hover { background-color: #8c7ae6; }"
-                                "")
+                                     "background-color: #a29bfe;\n"
+                                     "padding: 5px;\n"
+                                     "border-radius: 5px;\n"
+                                     "font: 10pt \"Comic Sans MS\";}\n"
+                                     "QPushButton:hover { background-color: #8c7ae6; }"
+                                     "")
         self.button_ok.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
         if self.lang_index != 0:
@@ -453,11 +458,12 @@ class MainWindow(QMainWindow):
             _words = translator.words_cybersecurity
         self.word_of_items = list(_words.items())
         self.random_index = random.randint(0, len(_words)-1)
-        self.word_shown = self.word_of_items[self.random_index][self.lang_index]
+        self.word_shown = self.word_of_items[23][self.lang_index]
 
     def generate_hidden_word(self):
-        self._word_hide = self.word_of_items[self.random_index][self.lang_index-1]
+        self._word_hide = self.word_of_items[23][self.lang_index-1]
         self.word_hide = []
+        self._word_shown = []
         for i in self._word_hide:
             if i == " ":
                 self.word_hide.append("\n")
@@ -465,6 +471,11 @@ class MainWindow(QMainWindow):
                 self.word_hide.append("-")
             else:
                 self.word_hide.append("_")
+        for j in self.word_shown:
+            if j == " ":
+                self._word_shown.append("\n")
+            else:
+                self._word_shown.append(j)
 
     def make_guess(self):
         self.sound_button()

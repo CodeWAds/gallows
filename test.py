@@ -1,24 +1,40 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton
-from PyQt6.QtCore import Qt
+import sys
+from PyQt6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtCore import QUrl, QTimer
 
-class MyWidget(QWidget):
+class MyWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.button = QPushButton("Нажми меня", self)
-        self.button.setGeometry(50, 50, 100, 30)
-        self.button.clicked.connect(self.mouseDoubleClickEvent)
+        self.initUI()
 
-    def mouseDoubleClickEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton:
-            print("Двойной щелчок на кнопке")
+    def initUI(self):
+        layout = QVBoxLayout()
 
-    def on_button_click(self):
-        print("Клик на кнопке")
+        self.button = QPushButton('Нажми меня', self)
+        self.button.clicked.connect(self.buttonClicked)
+        layout.addWidget(self.button)
+
+        self.setLayout(layout)
+
+        self.setGeometry(300, 300, 300, 200)
+        self.setWindowTitle('Пример с QTimer')
+        self.show()
+
+    def buttonClicked(self):
+        self.button.setEnabled(False)
+
+        # Создаем таймер на 2 секунды
+        timer = QTimer(self)
+        timer.singleShot(2000, self.enableButton)
+
+    def enableButton(self):
+        self.button.setEnabled(True)
+
+def main():
+    app = QApplication(sys.argv)
+    window = MyWindow()
+    sys.exit(app.exec())
 
 if __name__ == '__main__':
-    app = QApplication([])
-    widget = MyWidget()
-    widget.setGeometry(100, 100, 300, 200)
-    widget.show()
-    app.exec()
+    main()
