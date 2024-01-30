@@ -2,14 +2,14 @@ from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWid
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtMultimedia import *
-from PyQt6.QtCore import QUrl, QTimer
-import random
-import translator
+from settings import Settings
+from generation_words import Generation_words
 
 import sys
 
 
-class MainWindow(QMainWindow):
+# Виджет Главного меню
+class MainWindow(QMainWindow, Settings, Generation_words):
     def __init__(self):
         super().__init__()
         self.create_window()
@@ -22,10 +22,10 @@ class MainWindow(QMainWindow):
         self.StartMenu()
 
     def StartMenu(self):
-        # Название игры в окне
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
-        # установка изображения языка
+
+        # Установка изображения языка
         self.label_flag = QLabel(self)
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
         self.image_paths = ['src/language/RF.png', 'src/language/UK.png']
@@ -33,7 +33,6 @@ class MainWindow(QMainWindow):
         self.load_image()
         self.label_flag.setObjectName("label_flag")
 
-        # иконка
         icon = QIcon("src/stages_with_bg/stage_6.png")
         self.setWindowIcon(icon)
 
@@ -80,25 +79,38 @@ class MainWindow(QMainWindow):
                                         "")
         self.start_button.setObjectName("start_button")
         self.start_button.setText("СТАРТ")
-        self.start_button.clicked.connect(self.category_game)
+        self.start_button.clicked.connect(self.show_category_window)
 
         self.setCentralWidget(self.centralwidget)
 
         self.setWindowTitle("Виселица")
 
+    # Изменение виджета
+    def show_category_window(self):
+        category_widget = CategoryWindow(lang_index=self.lang_index)
+        self.setCentralWidget(category_widget)
+
+
+# Виджет Категорий
+class CategoryWindow(MainWindow):
+    def __init__(self, lang_index):
+        super().__init__()
+        self.lang_index = lang_index
+        self.category_game()
+
     def category_game(self):
         self.sound_button()
-        self.category_widget = QWidget(self)
-        self.category_widget.setObjectName("category_widget")
+        category_widget = QWidget(self)
+        category_widget.setObjectName("category_widget")
 
-        name_category = QLabel(self.category_widget)
-        name_category.setGeometry(QtCore.QRect(280, 100, 160, 50))
-        name_category.setStyleSheet("font-size: 25pt;")
-        name_category.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        name_category.setObjectName("name_game")
-        name_category.setText("Категория")
+        name_menu_category = QLabel(category_widget)
+        name_menu_category.setGeometry(QtCore.QRect(280, 100, 160, 50))
+        name_menu_category.setStyleSheet("font-size: 25pt;")
+        name_menu_category.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        name_menu_category.setObjectName("name_game")
+        name_menu_category.setText("Категория")
 
-        hardware_button = QPushButton(self.category_widget)
+        hardware_button = QPushButton(category_widget)
         hardware_button.setGeometry(QtCore.QRect(140, 260, 147, 39))
         hardware_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
@@ -114,9 +126,10 @@ class MainWindow(QMainWindow):
         hardware_button.setObjectName("hardware_button")
         hardware_button.setText("Аппаратное\n"
                                 "обеспечение")
+
         hardware_button.clicked.connect(self.hardware)
 
-        software_button = QPushButton(self.category_widget)
+        software_button = QPushButton(category_widget)
 
         software_button.setGeometry(QtCore.QRect(292, 260, 147, 39))
         software_button.setCursor(QtGui.QCursor(
@@ -135,7 +148,7 @@ class MainWindow(QMainWindow):
                                 "обеспечение")
         software_button.clicked.connect(self.software)
 
-        internet_button = QPushButton(self.category_widget)
+        internet_button = QPushButton(category_widget)
 
         internet_button.setGeometry(QtCore.QRect(444, 260, 147, 39))
         internet_button.setCursor(QtGui.QCursor(
@@ -153,7 +166,7 @@ class MainWindow(QMainWindow):
         internet_button.setText("Интернет")
         internet_button.clicked.connect(self.internet)
 
-        ai_button = QPushButton(self.category_widget)
+        ai_button = QPushButton(category_widget)
 
         ai_button.setGeometry(QtCore.QRect(140, 310, 147, 39))
         ai_button.setCursor(QtGui.QCursor(
@@ -172,7 +185,7 @@ class MainWindow(QMainWindow):
                           "интеллект")
         ai_button.clicked.connect(self.ai)
 
-        design_button = QPushButton(self.category_widget)
+        design_button = QPushButton(category_widget)
 
         design_button.setGeometry(QtCore.QRect(292, 310, 147, 39))
         design_button.setCursor(QtGui.QCursor(
@@ -190,7 +203,7 @@ class MainWindow(QMainWindow):
         design_button.setText("Дизайн")
         design_button.clicked.connect(self.design)
 
-        cybersecurity_button = QPushButton(self.category_widget)
+        cybersecurity_button = QPushButton(category_widget)
 
         cybersecurity_button.setGeometry(QtCore.QRect(444, 310, 147, 39))
         cybersecurity_button.setCursor(QtGui.QCursor(
@@ -208,10 +221,10 @@ class MainWindow(QMainWindow):
         cybersecurity_button.setText("Кибербезопасность")
         cybersecurity_button.clicked.connect(self.cybersecurity)
 
-        self.setCentralWidget(self.category_widget)
+        self.setCentralWidget(category_widget)
 
         if self.lang_index != 0:
-            name_category.setText("Category")
+            name_menu_category.setText("Category")
             hardware_button.setText("Hardware")
             software_button.setText("Software")
             internet_button.setText("Internet")
@@ -222,69 +235,54 @@ class MainWindow(QMainWindow):
 
     def hardware(self):
         self.sound_button()
-        self.hardware_widget = QWidget(self)
-        self.hardware_widget.setObjectName("hardware_widget")
-        self.category_words = 1
-        self.generate_open_word()
-        self.generate_hidden_word()
-        self.game(self.hardware_widget)
-
-        self.setCentralWidget(self.hardware_widget)
+        game_window = GameWindow(category_words=1, lang_index=self.lang_index)
+        self.setCentralWidget(game_window)
 
     def software(self):
         self.sound_button()
-        self.software_widget = QWidget(self)
-        self.software_widget.setObjectName("software_widget")
-        self.category_words = 2
-        self.generate_open_word()
-        self.generate_hidden_word()
-        self.game(self.software_widget)
-
-        self.setCentralWidget(self.software_widget)
+        game_window = GameWindow(category_words=2, lang_index=self.lang_index)
+        self.setCentralWidget(game_window)
 
     def internet(self):
         self.sound_button()
-        self.internet_widget = QWidget(self)
-        self.internet_widget.setObjectName("internet_widget")
-        self.category_words = 3
-        self.generate_open_word()
-        self.generate_hidden_word()
-        self.game(self.internet_widget)
-
-        self.setCentralWidget(self.internet_widget)
+        game_window = GameWindow(category_words=3, lang_index=self.lang_index)
+        self.setCentralWidget(game_window)
 
     def ai(self):
         self.sound_button()
-        self.ai_widget = QWidget(self)
-        self.ai_widget.setObjectName("ai_widget")
-        self.category_words = 4
-        self.generate_open_word()
-        self.generate_hidden_word()
-        self.game(self.ai_widget)
-
-        self.setCentralWidget(self.ai_widget)
+        game_window = GameWindow(category_words=4, lang_index=self.lang_index)
+        self.setCentralWidget(game_window)
 
     def design(self):
         self.sound_button()
-        self.design_widget = QWidget(self)
-        self.design_widget.setObjectName("design_widget")
-        self.category_words = 5
-        self.generate_open_word()
-        self.generate_hidden_word()
-        self.game(self.design_widget)
-
-        self.setCentralWidget(self.design_widget)
+        game_window = GameWindow(category_words=5, lang_index=self.lang_index)
+        self.setCentralWidget(game_window)
 
     def cybersecurity(self):
         self.sound_button()
-        self.cybersecurity_widget = QWidget(self)
-        self.cybersecurity_widget.setObjectName("cybersecurity_widget")
-        self.category_words = 6
+        game_window = GameWindow(category_words=6, lang_index=self.lang_index)
+        self.setCentralWidget(game_window)
+
+
+# Окно с игрой
+class GameWindow(MainWindow):
+    def __init__(self, category_words, lang_index):
+        super().__init__()
+        self.category_words = category_words
+        self.lang_index = lang_index
+
+        self.create_game_window()
+
+    # Создание окна игры, в соответствие с категорией
+    def create_game_window(self):
+        self.sound_button()
+        self.game_widget = QWidget(self)
+        self.game_widget.setObjectName("game_widget")
         self.generate_open_word()
         self.generate_hidden_word()
-        self.game(self.cybersecurity_widget)
+        self.game(self.game_widget)
 
-        self.setCentralWidget(self.cybersecurity_widget)
+        self.setCentralWidget(self.game_widget)
 
     def game(self, widget):
         self.widget = widget
@@ -333,6 +331,8 @@ class MainWindow(QMainWindow):
 
             self.keyboard_layout.addLayout(key_row)
         self.label_keyboard.setObjectName("label_keyboard")
+        
+        # Слово, показываемое игроку  
         open_word = QLabel(widget)
         open_word.setGeometry(QtCore.QRect(320, 20, 391, 121))
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -340,6 +340,7 @@ class MainWindow(QMainWindow):
         open_word.setText(" ".join(self._word_shown))
         open_word.setObjectName("open_word")
 
+        # Слово, которое нужно отгадать
         self.hidden_word = QLabel(widget)
         self.hidden_word.setGeometry(QtCore.QRect(320, 160, 391, 121))
         self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -348,38 +349,7 @@ class MainWindow(QMainWindow):
         self.hidden_word.setObjectName("hidden_word")
         self.make_guess()
 
-    def sound_button(self):
-        sender  = self.sender()
-        sender.setEnabled(False)
-        self.player = QMediaPlayer()
-        self.audioOutput = QAudioOutput()
-        self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
-        self.audioOutput.setVolume(50)
-        self.player.play()
-        timer = QTimer(self)
-        timer.singleShot(500, self.enable_button)
-
-    def enable_button(self):
-        self.lang_button.setEnabled(True)
-        self.start_button.setEnabled(True)
-
-    def sound_game_over(self):
-        self.player = QMediaPlayer()
-        self.audioOutput = QAudioOutput()
-        self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_over.wav"))
-        self.audioOutput.setVolume(50)
-        self.player.play()
-
-    def sound_game_win(self):
-        self.player = QMediaPlayer()
-        self.audioOutput = QAudioOutput()
-        self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_win.wav"))
-        self.audioOutput.setVolume(50)
-        self.player.play()
-
+    # Вызов дополнительного окна с результатом игры
     def show_popup(self, result_game):
         self.popup_game = QDialog(self)
         if result_game == "win":
@@ -439,44 +409,12 @@ class MainWindow(QMainWindow):
         self.button_ok.clicked.connect(self.return_to_menu)
         self.popup_game.exec()
 
+    # Возврат в меню
     def return_to_menu(self):
         self.popup_game.hide()
         self.widget.hide()
 
-    def generate_open_word(self):
-        if self.category_words == 1:
-            _words = translator.words_hardware
-        elif self.category_words == 2:
-            _words = translator.words_software
-        elif self.category_words == 3:
-            _words = translator.words_internet
-        elif self.category_words == 4:
-            _words = translator.words_ai
-        elif self.category_words == 5:
-            _words = translator.words_design
-        else: 
-            _words = translator.words_cybersecurity
-        self.word_of_items = list(_words.items())
-        self.random_index = random.randint(0, len(_words)-1)
-        self.word_shown = self.word_of_items[self.random_index][self.lang_index]
-
-    def generate_hidden_word(self):
-        self._word_hide = self.word_of_items[self.random_index][self.lang_index-1]
-        self.word_hide = []
-        self._word_shown = []
-        for i in self._word_hide:
-            if i == " ":
-                self.word_hide.append("\n")
-            elif i == "-":
-                self.word_hide.append("-")
-            else:
-                self.word_hide.append("_")
-        for j in self.word_shown:
-            if j == " ":
-                self._word_shown.append("\n")
-            else:
-                self._word_shown.append(j)
-
+    # Обработка выбора кнопок на виртуальной клавиатуре
     def make_guess(self):
         self.sound_button()
         sender = self.sender()
@@ -502,30 +440,6 @@ class MainWindow(QMainWindow):
             self.sound_game_over()
             self.result_game = "over"
             self.show_popup(self.result_game)
-
-    def load_image(self):
-        pixmap = QPixmap(self.image_paths[self.lang_index])
-        self.label_flag.setPixmap(pixmap)
-        self.resize(pixmap.width(), pixmap.height())
-
-    def change_lang(self):
-        self.sound_button()
-        self.lang_index = (
-            self.lang_index + 1) % len(self.image_paths)
-        self.load_image()
-        if self.lang_index == 0:
-            self.start_button.setText("СТАРТ")
-            self.name_game.setText("Виселица")
-            self.lang_button.setText("Сменить\n"
-                                     "язык")
-            self.setWindowTitle("Виселица")
-
-        else:
-            self.start_button.setText("START")
-            self.name_game.setText("Gallows")
-            self.lang_button.setText("Switch\n"
-                                     "language")
-            self.setWindowTitle("Gallows")
 
 
 if __name__ == '__main__':

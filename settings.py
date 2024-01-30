@@ -1,9 +1,66 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QDialog
-from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6 import QtCore, QtGui
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtMultimedia import *
 from PyQt6.QtCore import QUrl, QTimer
-import random
-import translator
 
-import sys
+class Settings():
+
+    # Загрузка изображения
+    def load_image(self):
+        pixmap = QPixmap(self.image_paths[self.lang_index])
+        self.label_flag.setPixmap(pixmap)
+        self.resize(pixmap.width(), pixmap.height())
+
+    # Базовый звук, для кнопок
+    def sound_button(self):
+        sender  = self.sender()
+        sender.setEnabled(False)
+        self.player = QMediaPlayer()
+        self.audioOutput = QAudioOutput()
+        self.player.setAudioOutput(self.audioOutput)
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
+        self.audioOutput.setVolume(50)
+        self.player.play()
+        timer = QTimer(self)
+        timer.singleShot(500, self.enable_button)
+
+    def enable_button(self):
+        self.lang_button.setEnabled(True)
+        self.start_button.setEnabled(True)
+    
+    # Звук проигрыша
+    def sound_game_over(self):
+        self.player = QMediaPlayer()
+        self.audioOutput = QAudioOutput()
+        self.player.setAudioOutput(self.audioOutput)
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_over.wav"))
+        self.audioOutput.setVolume(50)
+        self.player.play()
+
+    # Звук выигрыша
+    def sound_game_win(self):
+        self.player = QMediaPlayer()
+        self.audioOutput = QAudioOutput()
+        self.player.setAudioOutput(self.audioOutput)
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_win.wav"))
+        self.audioOutput.setVolume(50)
+        self.player.play()
+
+    # Обработчик изменения языка
+    def change_lang(self):
+        self.sound_button()
+        self.lang_index = (
+            self.lang_index + 1) % len(self.image_paths)
+        self.load_image()
+        if self.lang_index == 0:
+            self.start_button.setText("СТАРТ")
+            self.name_game.setText("Виселица")
+            self.lang_button.setText("Сменить\n"
+                                     "язык")
+            self.setWindowTitle("Виселица")
+
+        else:
+            self.start_button.setText("START")
+            self.name_game.setText("Gallows")
+            self.lang_button.setText("Switch\n"
+                                     "language")
+            self.setWindowTitle("Gallows")
