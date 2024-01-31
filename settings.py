@@ -17,7 +17,7 @@ class Settings():
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/buttons.wav"))
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/system/buttons.wav"))
         self.audioOutput.setVolume(50)
         self.player.play()
         timer = QTimer(self)
@@ -32,7 +32,7 @@ class Settings():
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_over.wav"))
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/system/game_over.wav"))
         self.audioOutput.setVolume(50)
         self.player.play()
 
@@ -41,7 +41,7 @@ class Settings():
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/game_win.wav"))
+        self.player.setSource(QUrl.fromLocalFile("src/sounds/system/game_win.wav"))
         self.audioOutput.setVolume(50)
         self.player.play()
 

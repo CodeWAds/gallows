@@ -28,12 +28,12 @@ class MainWindow(QMainWindow, Settings, Generation_words):
         # Установка изображения языка
         self.label_flag = QLabel(self)
         self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
-        self.image_paths = ['src/language/RF.png', 'src/language/UK.png']
+        self.image_paths = ['src/img/flag_rus.png', 'src/img/flag_en.png']
         self.lang_index = 0
         self.load_image()
         self.label_flag.setObjectName("label_flag")
 
-        icon = QIcon("src/stages_with_bg/stage_6.png")
+        icon = QIcon("src/img/stages_gallows/stage_6.png")
         self.setWindowIcon(icon)
 
         self.name_game = QLabel(self)
@@ -289,7 +289,7 @@ class GameWindow(MainWindow):
         self.attempts_left = -1
         self.gallows_picture = QLabel(widget)
         self.gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
-        pixmap_gallow = QPixmap("src/stages_with_bg/stage_0.png")
+        pixmap_gallow = QPixmap("src/img/stages_gallows/stage_0.png")
         self.gallows_picture.setPixmap(pixmap_gallow)
         self.resize(pixmap_gallow.width(), pixmap_gallow.height())
         self.gallows_picture.setObjectName("gallow_picture")
@@ -377,7 +377,7 @@ class GameWindow(MainWindow):
                 Correct answer: {self._word_hide}"""
 
         self.popup_game.setWindowTitle(title)
-        self.popup_game.setWindowIcon(QIcon("src/stages_with_bg/stage_6.png"))
+        self.popup_game.setWindowIcon(QIcon("src/img/stages_galows/stage_6.png"))
         self.popup_game.setFixedSize(480, 150)
 
         label_answer = QLabel(self.popup_game)
@@ -389,7 +389,7 @@ class GameWindow(MainWindow):
         label_text = QLabel(self.popup_game)
         label_text.setGeometry(QtCore.QRect(180, 100, 480, 50))
 
-        pixmap = QPixmap(f"src/{image}.png")
+        pixmap = QPixmap(f"src/img/{image}.png")
         label_image = QLabel(self.popup_game)
         label_image.setGeometry(QtCore.QRect(20, 30, 60, 60))
         label_image.setPixmap(pixmap)
@@ -412,7 +412,8 @@ class GameWindow(MainWindow):
     # Возврат в меню
     def return_to_menu(self):
         self.popup_game.hide()
-        self.widget.hide()
+        main_window = MainWindow()
+        self.setCentralWidget(main_window)
 
     # Обработка выбора кнопок на виртуальной клавиатуре
     def make_guess(self):
@@ -430,7 +431,7 @@ class GameWindow(MainWindow):
         else:
             self.attempts_left += 1
             pixmap_gallow = QPixmap(
-                f"src/stages_with_bg/stage_{self.attempts_left}.png")
+                f"src/img/stages_gallows/stage_{self.attempts_left}.png")
             self.gallows_picture.setPixmap(pixmap_gallow)
         if "_" not in self.word_hide:
             self.sound_game_win()

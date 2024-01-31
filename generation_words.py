@@ -21,11 +21,20 @@ class Generation_words():
             _words = translator.words_cybersecurity
         self.word_of_items = list(_words.items())
         self.random_index = random.randint(0, len(_words)-1)
-        self.word_shown = self.word_of_items[self.random_index][self.lang_index]
+
+        if self.lang_index == 0:
+            self.word_shown = self.word_of_items[self.random_index][0]
+
+        else:
+            self.word_shown = self.word_of_items[self.random_index][1][0]
+
 
     # Слово, которое игрок долже отгадать
     def generate_hidden_word(self):
-        self._word_hide = self.word_of_items[self.random_index][self.lang_index-1]
+        if self.lang_index == 0:
+            self._word_hide = self.word_of_items[self.random_index][1][0]
+        else:
+            self._word_hide = self.word_of_items[self.random_index][0]
         self.word_hide = []
         self._word_shown = []
         for i in self._word_hide:
@@ -40,3 +49,6 @@ class Generation_words():
                 self._word_shown.append("\n")
             else:
                 self._word_shown.append(j)
+
+    # def generate_sound(self):
+    #     pass - доделать
