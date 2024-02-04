@@ -1,14 +1,16 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QDialog
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QDialog, QToolButton
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtMultimedia import *
 from settings import Settings
 from generation_words import Generation_words
+from PyQt6.QtCore import Qt
+
 
 import sys
 
 
-# Виджет Главного меню
+#  Главного меню
 class MainWindow(QMainWindow, Settings, Generation_words):
     def __init__(self):
         super().__init__()
@@ -16,7 +18,7 @@ class MainWindow(QMainWindow, Settings, Generation_words):
 
     def create_window(self):
         self.setObjectName("MainWindow")
-        self.setFixedSize(720, 480)
+        self.setMinimumSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 14pt \"Comic Sans MS\"")
         self.StartMenu()
@@ -24,6 +26,9 @@ class MainWindow(QMainWindow, Settings, Generation_words):
     def StartMenu(self):
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
+
+        icon = QIcon("src/img/stages_gallows/stage_6.png")
+        self.setWindowIcon(icon)
 
         # Установка изображения языка
         self.label_flag = QLabel(self)
@@ -33,15 +38,12 @@ class MainWindow(QMainWindow, Settings, Generation_words):
         self.load_image()
         self.label_flag.setObjectName("label_flag")
 
-        icon = QIcon("src/img/stages_gallows/stage_6.png")
-        self.setWindowIcon(icon)
-
         self.name_game = QLabel(self)
-        self.name_game.setGeometry(QtCore.QRect(280, 100, 160, 50))
         self.name_game.setStyleSheet("font-size: 25pt;")
-        self.name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.name_game.setObjectName("name_game")
         self.name_game.setText("Виселица")
+        self.name_game.setGeometry(QtCore.QRect(280, 100, 160, 50))
+        self.name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.lang_button = QPushButton(self)
 
@@ -85,13 +87,14 @@ class MainWindow(QMainWindow, Settings, Generation_words):
 
         self.setWindowTitle("Виселица")
 
-    # Изменение виджета
+    # Изменение окна
+
     def show_category_window(self):
         category_widget = CategoryWindow(lang_index=self.lang_index)
         self.setCentralWidget(category_widget)
 
 
-# Виджет Категорий
+# Окно Категорий
 class CategoryWindow(MainWindow):
     def __init__(self, lang_index):
         super().__init__()
@@ -331,8 +334,8 @@ class GameWindow(MainWindow):
 
             self.keyboard_layout.addLayout(key_row)
         self.label_keyboard.setObjectName("label_keyboard")
-        
-        # Слово, показываемое игроку  
+
+        # Слово, показываемое игроку
         open_word = QLabel(widget)
         open_word.setGeometry(QtCore.QRect(320, 20, 391, 121))
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -349,7 +352,22 @@ class GameWindow(MainWindow):
         self.hidden_word.setObjectName("hidden_word")
         self.make_guess()
 
+        if self.lang_index == 0:
+            self.sound_word = QPushButton(self)
+            self.sound_word.setGeometry(670, 20, 48, 48)
+            
+            self.sound_word.setCursor(QtGui.QCursor(
+                QtCore.Qt.CursorShape.PointingHandCursor))
+            self.sound_word.setFlat(True)
+            pixmap = QPixmap("src/img/sound_word.png")
+            icon = QIcon(pixmap)
+            self.sound_word.setIcon(icon)
+            self.sound_word.setIconSize(pixmap.size())
+
+            self.sound_word.clicked.connect(self.sound_words)
+
     # Вызов дополнительного окна с результатом игры
+
     def show_popup(self, result_game):
         self.popup_game = QDialog(self)
         if result_game == "win":
@@ -377,7 +395,8 @@ class GameWindow(MainWindow):
                 Correct answer: {self._word_hide}"""
 
         self.popup_game.setWindowTitle(title)
-        self.popup_game.setWindowIcon(QIcon("src/img/stages_galows/stage_6.png"))
+        self.popup_game.setWindowIcon(
+            QIcon("src/img/stages_gallows/stage_6.png"))
         self.popup_game.setFixedSize(480, 150)
 
         label_answer = QLabel(self.popup_game)

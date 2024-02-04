@@ -1,6 +1,7 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtMultimedia import *
 from PyQt6.QtCore import QUrl, QTimer
+from PyQt6 import QtCore
 
 class Settings():
 
@@ -64,3 +65,17 @@ class Settings():
             self.lang_button.setText("Switch\n"
                                      "language")
             self.setWindowTitle("Gallows")
+
+    def sound_words(self):
+        sender  = self.sender()
+        sender.setEnabled(False)
+        self.player = QMediaPlayer()
+        self.audioOutput = QAudioOutput()
+        self.player.setAudioOutput(self.audioOutput)
+        self.player.setSource(QUrl.fromLocalFile(f"src/sounds/words/{self.word_shown}.mp3"))
+        self.audioOutput.setVolume(50)
+        self.player.play()
+        timer = QTimer(self)
+        timer.singleShot(3000, self.enable_words)
+    def enable_words(self):
+        self.sound_word.setEnabled(True)

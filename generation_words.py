@@ -26,13 +26,13 @@ class Generation_words():
             self.word_shown = self.word_of_items[self.random_index][0]
 
         else:
-            self.word_shown = self.word_of_items[self.random_index][1][0]
+            self.word_shown = self.word_of_items[self.random_index][1]
 
 
     # Слово, которое игрок долже отгадать
     def generate_hidden_word(self):
         if self.lang_index == 0:
-            self._word_hide = self.word_of_items[self.random_index][1][0]
+            self._word_hide = self.word_of_items[self.random_index][1]
         else:
             self._word_hide = self.word_of_items[self.random_index][0]
         self.word_hide = []
