@@ -26,7 +26,7 @@ class Settings():
 
     def enable_button(self):
         self.lang_button.setEnabled(True)
-        self.start_button.setEnabled(True)
+       
     
     # Звук проигрыша
     def sound_game_over(self):
@@ -57,14 +57,12 @@ class Settings():
             self.name_game.setText("Виселица")
             self.lang_button.setText("Сменить\n"
                                      "язык")
-            self.setWindowTitle("Виселица")
 
         else:
             self.start_button.setText("START")
             self.name_game.setText("Gallows")
             self.lang_button.setText("Switch\n"
                                      "language")
-            self.setWindowTitle("Gallows")
 
     def sound_words(self):
         sender  = self.sender()

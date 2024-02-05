@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QDialog, QToolButton
-from PyQt6.QtGui import QPixmap, QIcon
+from PyQt6.QtGui import QCloseEvent, QPixmap, QIcon
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtMultimedia import *
 from settings import Settings
@@ -18,7 +18,7 @@ class MainWindow(QMainWindow, Settings, Generation_words):
 
     def create_window(self):
         self.setObjectName("MainWindow")
-        self.setMinimumSize(720, 480)
+        self.setFixedSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 14pt \"Comic Sans MS\"")
         self.StartMenu()
@@ -354,7 +354,7 @@ class GameWindow(MainWindow):
 
         if self.lang_index == 0:
             self.sound_word = QPushButton(self)
-            self.sound_word.setGeometry(670, 20, 48, 48)
+            self.sound_word.setGeometry(665, 20, 48, 48)
             
             self.sound_word.setCursor(QtGui.QCursor(
                 QtCore.Qt.CursorShape.PointingHandCursor))
@@ -363,6 +363,7 @@ class GameWindow(MainWindow):
             icon = QIcon(pixmap)
             self.sound_word.setIcon(icon)
             self.sound_word.setIconSize(pixmap.size())
+            self.sound_word.setStyleSheet("background-color: transparent")
 
             self.sound_word.clicked.connect(self.sound_words)
 
@@ -426,7 +427,9 @@ class GameWindow(MainWindow):
         if self.lang_index != 0:
             self.button_ok.setText(return_button)
         self.button_ok.clicked.connect(self.return_to_menu)
-        self.popup_game.exec()
+        self.popup_game.rejected.connect(self.return_to_menu)
+
+        self.popup_game.exec()    
 
     # Возврат в меню
     def return_to_menu(self):

@@ -1,40 +1,35 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6 import QtGui, QtCore
-import sys
+from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QPushButton, QLabel
+from PyQt6.QtCore import Qt
 
-class MyMainWindow(QMainWindow):
+class MyDialog(QDialog):
     def __init__(self):
         super().__init__()
 
-        self.initUI()
+        self.setWindowTitle("Диалоговое окно")
+        self.setGeometry(100, 100, 300, 200)
 
-    def initUI(self):
-        self.sound_word = QPushButton(self)
-        self.sound_word.setGeometry(670, 20, 48, 48)
-        self.sound_word.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        layout = QVBoxLayout()
 
-        pixmap = QPixmap("src/img/sound_word.png")
-        icon = QIcon(pixmap)
-        self.sound_word.setIcon(icon)
-        self.sound_word.setIconSize(pixmap.size())
+        label = QLabel("Пример диалогового окна")
+        layout.addWidget(label)
 
-        # Установка кнопки в режиме без обводки
-        self.sound_word.setFlat(True)
+        closeButton = QPushButton("Закрыть")
+        closeButton.clicked.connect(self.close)  # Подключение кнопки к закрытию диалога
+        layout.addWidget(closeButton)
 
-        self.sound_word.clicked.connect(self.sound_words)
+        self.setLayout(layout)
 
-        self.setGeometry(300, 300, 800, 600)
-        self.setWindowTitle('No Border Button Example')
+    def closeEvent(self, event):
+        self.my_custom_function()
+        event.accept()  # Закрыть диалог
 
-    def sound_words(self):
-        print('Sound button clicked!')
+    def my_custom_function(self):
+        print("Функция при закрытии диалога")
 
-def main():
-    app = QApplication(sys.argv)
-    mainWindow = MyMainWindow()
-    mainWindow.show()
-    sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication([])
 
-if __name__ == '__main__':
-    main()
+    dialog = MyDialog()
+    dialog.exec()
+
+    app.exec()
