@@ -156,7 +156,7 @@ words_ai = {
     "cloud computing": "облачные вычисления",
     "computer vision": "компьютерное зрение",
     "data engineering": "инженерия данных",
-    "ethics in AI": "этика в искусственном интеллекте",
+    "ethics in ai": "этика в искусственном интеллекте",
     "fuzzy logic": "нечеткая логика",
     "intelligent agent": "интеллектуальный агент",
     "machine translation": "машинный перевод",

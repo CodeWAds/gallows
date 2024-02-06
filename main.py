@@ -18,12 +18,13 @@ class MainWindow(QMainWindow, Settings, Generation_words):
 
     def create_window(self):
         self.setObjectName("MainWindow")
-        self.setFixedSize(720, 480)
+        self.setMinimumSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 14pt \"Comic Sans MS\"")
         self.StartMenu()
 
     def StartMenu(self):
+        self.mus = False
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -32,7 +33,7 @@ class MainWindow(QMainWindow, Settings, Generation_words):
 
         # Установка изображения языка
         self.label_flag = QLabel(self)
-        self.label_flag.setGeometry(QtCore.QRect(26, 10, 31, 31))
+        self.label_flag.setGeometry(26, 10, 31, 31)
         self.image_paths = ['src/img/flag_rus.png', 'src/img/flag_en.png']
         self.lang_index = 0
         self.load_image()
@@ -42,12 +43,12 @@ class MainWindow(QMainWindow, Settings, Generation_words):
         self.name_game.setStyleSheet("font-size: 25pt;")
         self.name_game.setObjectName("name_game")
         self.name_game.setText("Виселица")
-        self.name_game.setGeometry(QtCore.QRect(280, 100, 160, 50))
+        self.name_game.setGeometry(280, 100, 160, 50)
         self.name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.lang_button = QPushButton(self)
 
-        self.lang_button.setGeometry(QtCore.QRect(10, 40, 70, 30))
+        self.lang_button.setGeometry(10, 40, 70, 30)
         self.lang_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
         self.lang_button.setLayoutDirection(
@@ -66,7 +67,7 @@ class MainWindow(QMainWindow, Settings, Generation_words):
 
         self.start_button = QPushButton(self)
 
-        self.start_button.setGeometry(QtCore.QRect(280, 260, 160, 40))
+        self.start_button.setGeometry(280, 260, 160, 40)
         self.start_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
         self.start_button.setLayoutDirection(
@@ -84,8 +85,35 @@ class MainWindow(QMainWindow, Settings, Generation_words):
         self.start_button.clicked.connect(self.show_category_window)
 
         self.setCentralWidget(self.centralwidget)
-
         self.setWindowTitle("Виселица")
+
+    def adjust_widget_sizes(self):
+
+        label_width = self.width() // 2
+        label_height = self.height() // 2
+
+        # Центрируем название игры относительно новых размеров окна
+        label_x = (self.width() - label_width) // 2
+        label_y = (self.height() - label_height) // 2 - 100
+
+        self.name_game.setGeometry(label_x, label_y, label_width, label_height)
+
+        # Обновляем размеры и положение кнопки "СТАРТ"
+        button_width = label_width
+        button_height = 40
+        button_x = label_x
+        button_y = label_y + label_height + 20
+
+        self.start_button.setGeometry(
+            button_x, button_y, button_width, button_height)
+
+        # Устанавливаем размер текста пропорционально высоте виджета
+        font_size = label_height * 0.1
+        self.name_game.setStyleSheet(f"font-size: {font_size}pt;")
+
+    def resizeEvent(self, event):
+        self.adjust_widget_sizes()
+        super().resizeEvent(event)
 
     # Изменение окна
 
@@ -102,139 +130,141 @@ class CategoryWindow(MainWindow):
         self.category_game()
 
     def category_game(self):
+        self.mus = False
         self.sound_button()
         category_widget = QWidget(self)
         category_widget.setObjectName("category_widget")
 
-        name_menu_category = QLabel(category_widget)
-        name_menu_category.setGeometry(QtCore.QRect(280, 100, 160, 50))
-        name_menu_category.setStyleSheet("font-size: 25pt;")
-        name_menu_category.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        name_menu_category.setObjectName("name_game")
-        name_menu_category.setText("Категория")
+        self.name_menu_category = QLabel(category_widget)
+        self.name_menu_category.setGeometry(280, 100, 160, 50)
+        self.name_menu_category.setStyleSheet("font-size: 25pt;")
+        self.name_menu_category.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.name_menu_category.setObjectName("name_game")
+        self.name_menu_category.setText("Категория")
 
-        hardware_button = QPushButton(category_widget)
-        hardware_button.setGeometry(QtCore.QRect(140, 260, 147, 39))
-        hardware_button.setCursor(QtGui.QCursor(
+        self.hardware_button = QPushButton(category_widget)
+        self.hardware_button.setGeometry(140, 260, 147, 39)
+        self.hardware_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
-        hardware_button.setLayoutDirection(
+        self.hardware_button.setLayoutDirection(
             QtCore.Qt.LayoutDirection.LeftToRight)
-        hardware_button.setAutoFillBackground(False)
-        hardware_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
-                                      "background-color: #a29bfe;\n"
-                                      "border-radius: 5px;\n"
-                                      "font: 10pt \"Comic Sans MS\";}\n"
-                                      "QPushButton:hover { background-color:#8c7ae6; }"
-                                      "")
-        hardware_button.setObjectName("hardware_button")
-        hardware_button.setText("Аппаратное\n"
-                                "обеспечение")
+        self.hardware_button.setAutoFillBackground(False)
+        self.hardware_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+                                           "background-color: #a29bfe;\n"
+                                           "border-radius: 5px;\n"
+                                           "font: 10pt \"Comic Sans MS\";}\n"
+                                           "QPushButton:hover { background-color:#8c7ae6; }"
+                                           "")
+        self.hardware_button.setObjectName("hardware_button")
+        self.hardware_button.setText("Аппаратное\n"
+                                     "обеспечение")
 
-        hardware_button.clicked.connect(self.hardware)
+        self.hardware_button.clicked.connect(self.hardware)
 
-        software_button = QPushButton(category_widget)
+        self.software_button = QPushButton(category_widget)
 
-        software_button.setGeometry(QtCore.QRect(292, 260, 147, 39))
-        software_button.setCursor(QtGui.QCursor(
+        self.software_button.setGeometry(292, 260, 147, 39)
+        self.software_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
-        software_button.setLayoutDirection(
+        self.software_button.setLayoutDirection(
             QtCore.Qt.LayoutDirection.LeftToRight)
-        software_button.setAutoFillBackground(False)
-        software_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
-                                      "background-color: #a29bfe;\n"
-                                      "border-radius: 5px;\n"
-                                      "font: 10pt \"Comic Sans MS\";}\n"
-                                      "QPushButton:hover { background-color: #8c7ae6; }"
-                                      "")
-        software_button.setObjectName("soft_button")
-        software_button.setText("Программное\n"
-                                "обеспечение")
-        software_button.clicked.connect(self.software)
-
-        internet_button = QPushButton(category_widget)
-
-        internet_button.setGeometry(QtCore.QRect(444, 260, 147, 39))
-        internet_button.setCursor(QtGui.QCursor(
-            QtCore.Qt.CursorShape.PointingHandCursor))
-        internet_button.setLayoutDirection(
-            QtCore.Qt.LayoutDirection.LeftToRight)
-        internet_button.setAutoFillBackground(False)
-        internet_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
-                                      "background-color: #a29bfe;\n"
-                                      "border-radius: 5px;\n"
-                                      "font: 10pt \"Comic Sans MS\";}\n"
-                                      "QPushButton:hover { background-color: #8c7ae6; }"
-                                      "")
-        internet_button.setObjectName("internet_button")
-        internet_button.setText("Интернет")
-        internet_button.clicked.connect(self.internet)
-
-        ai_button = QPushButton(category_widget)
-
-        ai_button.setGeometry(QtCore.QRect(140, 310, 147, 39))
-        ai_button.setCursor(QtGui.QCursor(
-            QtCore.Qt.CursorShape.PointingHandCursor))
-        ai_button.setLayoutDirection(
-            QtCore.Qt.LayoutDirection.LeftToRight)
-        ai_button.setAutoFillBackground(False)
-        ai_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
-                                "background-color: #a29bfe;\n"
-                                "border-radius: 5px;\n"
-                                "font: 10pt \"Comic Sans MS\";}\n"
-                                "QPushButton:hover { background-color: #8c7ae6; }"
-                                "")
-        ai_button.setObjectName("ai_button")
-        ai_button.setText("Искусственный\n"
-                          "интеллект")
-        ai_button.clicked.connect(self.ai)
-
-        design_button = QPushButton(category_widget)
-
-        design_button.setGeometry(QtCore.QRect(292, 310, 147, 39))
-        design_button.setCursor(QtGui.QCursor(
-            QtCore.Qt.CursorShape.PointingHandCursor))
-        design_button.setLayoutDirection(
-            QtCore.Qt.LayoutDirection.LeftToRight)
-        design_button.setAutoFillBackground(False)
-        design_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
-                                    "background-color: #a29bfe;\n"
-                                    "border-radius: 5px;\n"
-                                    "font: 10pt \"Comic Sans MS\";}\n"
-                                    "QPushButton:hover { background-color: #8c7ae6; }"
-                                    "")
-        design_button.setObjectName("design_button")
-        design_button.setText("Дизайн")
-        design_button.clicked.connect(self.design)
-
-        cybersecurity_button = QPushButton(category_widget)
-
-        cybersecurity_button.setGeometry(QtCore.QRect(444, 310, 147, 39))
-        cybersecurity_button.setCursor(QtGui.QCursor(
-            QtCore.Qt.CursorShape.PointingHandCursor))
-        cybersecurity_button.setLayoutDirection(
-            QtCore.Qt.LayoutDirection.LeftToRight)
-        cybersecurity_button.setAutoFillBackground(False)
-        cybersecurity_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+        self.software_button.setAutoFillBackground(False)
+        self.software_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                            "background-color: #a29bfe;\n"
                                            "border-radius: 5px;\n"
                                            "font: 10pt \"Comic Sans MS\";}\n"
                                            "QPushButton:hover { background-color: #8c7ae6; }"
                                            "")
-        cybersecurity_button.setObjectName("cybersecurity_button")
-        cybersecurity_button.setText("Кибербезопасность")
-        cybersecurity_button.clicked.connect(self.cybersecurity)
+        self.software_button.setObjectName("soft_button")
+        self.software_button.setText("Программное\n"
+                                     "обеспечение")
+        self.software_button.clicked.connect(self.software)
+
+        self.internet_button = QPushButton(category_widget)
+
+        self.internet_button.setGeometry(444, 260, 147, 39)
+        self.internet_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        self.internet_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        self.internet_button.setAutoFillBackground(False)
+        self.internet_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+                                           "background-color: #a29bfe;\n"
+                                           "border-radius: 5px;\n"
+                                           "font: 10pt \"Comic Sans MS\";}\n"
+                                           "QPushButton:hover { background-color: #8c7ae6; }"
+                                           "")
+        self.internet_button.setObjectName("internet_button")
+        self.internet_button.setText("Интернет")
+        self.internet_button.clicked.connect(self.internet)
+
+        self.ai_button = QPushButton(category_widget)
+
+        self.ai_button.setGeometry(140, 310, 147, 39)
+        self.ai_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        self.ai_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        self.ai_button.setAutoFillBackground(False)
+        self.ai_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+                                     "background-color: #a29bfe;\n"
+                                     "border-radius: 5px;\n"
+                                     "font: 10pt \"Comic Sans MS\";}\n"
+                                     "QPushButton:hover { background-color: #8c7ae6; }"
+                                     "")
+        self.ai_button.setObjectName("ai_button")
+        self.ai_button.setText("Искусственный\n"
+                               "интеллект")
+        self.ai_button.clicked.connect(self.ai)
+
+        self.design_button = QPushButton(category_widget)
+
+        self.design_button.setGeometry(292, 310, 147, 39)
+        self.design_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        self.design_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        self.design_button.setAutoFillBackground(False)
+        self.design_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+                                         "background-color: #a29bfe;\n"
+                                         "border-radius: 5px;\n"
+                                         "font: 10pt \"Comic Sans MS\";}\n"
+                                         "QPushButton:hover { background-color: #8c7ae6; }"
+                                         "")
+        self.design_button.setObjectName("design_button")
+        self.design_button.setText("Дизайн")
+        self.design_button.clicked.connect(self.design)
+
+        self.cybersecurity_button = QPushButton(category_widget)
+
+        self.cybersecurity_button.setGeometry(444, 310, 147, 39)
+        self.cybersecurity_button.setCursor(QtGui.QCursor(
+            QtCore.Qt.CursorShape.PointingHandCursor))
+        self.cybersecurity_button.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
+        self.cybersecurity_button.setAutoFillBackground(False)
+        self.cybersecurity_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
+                                                "background-color: #a29bfe;\n"
+                                                "border-radius: 5px;\n"
+                                                "font: 10pt \"Comic Sans MS\";}\n"
+                                                "QPushButton:hover { background-color: #8c7ae6; }"
+                                                "")
+        self.cybersecurity_button.setObjectName("cybersecurity_button")
+        self.cybersecurity_button.setText("Кибербезопасность")
+        self.cybersecurity_button.clicked.connect(self.cybersecurity)
 
         self.setCentralWidget(category_widget)
 
         if self.lang_index != 0:
-            name_menu_category.setText("Category")
-            hardware_button.setText("Hardware")
-            software_button.setText("Software")
-            internet_button.setText("Internet")
-            ai_button.setText("Artificial\n"
-                              "Intelligence")
-            design_button.setText("Design")
-            cybersecurity_button.setText("Cybersecurity")
+            self.name_menu_category.setText("Category")
+            self.hardware_button.setText("Hardware")
+            self.software_button.setText("Software")
+            self.internet_button.setText("Internet")
+            self.ai_button.setText("Artificial\n"
+                                   "Intelligence")
+            self.design_button.setText("Design")
+            self.cybersecurity_button.setText("Cybersecurity")
 
     def hardware(self):
         self.sound_button()
@@ -266,6 +296,42 @@ class CategoryWindow(MainWindow):
         game_window = GameWindow(category_words=6, lang_index=self.lang_index)
         self.setCentralWidget(game_window)
 
+    def adjust_widget_sizes(self):
+        label_width = self.width() // 2
+        label_height = self.height() // 2
+
+        # Центрирование названия категории относительно новых размеров окна
+        label_x = (self.width() - label_width) // 2
+        label_y = (self.height() - label_height) // 2 - 100
+
+        self.name_menu_category.setGeometry(
+            label_x, label_y, label_width, label_height)
+
+        font_size = label_height * 0.1
+        self.name_menu_category.setStyleSheet(f"font-size: {font_size}pt;")
+
+        # Рассчёт размеров и положения кнопок категорий
+        button_width = label_width // 3 + 5
+        button_height = 39
+        button_spacing = 10
+        buttons_per_row = 3
+
+        button_x = label_x
+        button_y = label_y + label_height + 20
+
+        for i, button in enumerate([self.hardware_button, self.software_button, self.internet_button, self.ai_button, self.design_button, self.cybersecurity_button]):
+            button.setGeometry(button_x, button_y, button_width, button_height)
+
+            if (i + 1) % buttons_per_row == 0:
+                button_x = label_x
+                button_y += button_height + button_spacing
+            else:
+                button_x += button_width + button_spacing
+
+    def resizeEvent(self, event):
+        self.adjust_widget_sizes()
+        super().resizeEvent(event)
+
 
 # Окно с игрой
 class GameWindow(MainWindow):
@@ -273,11 +339,11 @@ class GameWindow(MainWindow):
         super().__init__()
         self.category_words = category_words
         self.lang_index = lang_index
-
         self.create_game_window()
 
     # Создание окна игры, в соответствие с категорией
     def create_game_window(self):
+        self.mus = False
         self.sound_button()
         self.game_widget = QWidget(self)
         self.game_widget.setObjectName("game_widget")
@@ -291,7 +357,7 @@ class GameWindow(MainWindow):
         self.widget = widget
         self.attempts_left = -1
         self.gallows_picture = QLabel(widget)
-        self.gallows_picture.setGeometry(QtCore.QRect(10, 10, 301, 281))
+        self.gallows_picture.setGeometry(10, 10, 301, 281)
         pixmap_gallow = QPixmap("src/img/stages_gallows/stage_0.png")
         self.gallows_picture.setPixmap(pixmap_gallow)
         self.resize(pixmap_gallow.width(), pixmap_gallow.height())
@@ -314,7 +380,7 @@ class GameWindow(MainWindow):
         else:
             keyboard = english_keys
         self.label_keyboard = QLabel(widget)
-        self.label_keyboard.setGeometry(QtCore.QRect(10, 316, 701, 151))
+        self.label_keyboard.setGeometry(10, 316, 701, 151)
         self.keyboard_layout = QVBoxLayout(self.label_keyboard)
 
         for row in keyboard:
@@ -337,7 +403,7 @@ class GameWindow(MainWindow):
 
         # Слово, показываемое игроку
         open_word = QLabel(widget)
-        open_word.setGeometry(QtCore.QRect(320, 20, 391, 121))
+        open_word.setGeometry(320, 20, 391, 121)
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         open_word.setStyleSheet("font-size: 17pt;")
         open_word.setText(" ".join(self._word_shown))
@@ -345,7 +411,7 @@ class GameWindow(MainWindow):
 
         # Слово, которое нужно отгадать
         self.hidden_word = QLabel(widget)
-        self.hidden_word.setGeometry(QtCore.QRect(320, 160, 391, 121))
+        self.hidden_word.setGeometry(320, 160, 391, 121)
         self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.hidden_word.setStyleSheet("font-size: 13pt;")
         self.hidden_word.setText(" ".join(self.word_hide))
@@ -355,7 +421,7 @@ class GameWindow(MainWindow):
         if self.lang_index == 0:
             self.sound_word = QPushButton(self)
             self.sound_word.setGeometry(665, 20, 48, 48)
-            
+
             self.sound_word.setCursor(QtGui.QCursor(
                 QtCore.Qt.CursorShape.PointingHandCursor))
             self.sound_word.setFlat(True)
@@ -366,6 +432,16 @@ class GameWindow(MainWindow):
             self.sound_word.setStyleSheet("background-color: transparent")
 
             self.sound_word.clicked.connect(self.sound_words)
+
+    def adjust_widget_sizes(self):
+        label_width = self.width() // 2
+        label_height = self.height() // 2
+        
+        
+
+    def resizeEvent(self, event):
+        self.adjust_widget_sizes()
+        super().resizeEvent(event)
 
     # Вызов дополнительного окна с результатом игры
 
@@ -401,17 +477,17 @@ class GameWindow(MainWindow):
         self.popup_game.setFixedSize(480, 150)
 
         label_answer = QLabel(self.popup_game)
-        label_answer.setGeometry(QtCore.QRect(0, 10, 480, 60))
+        label_answer.setGeometry(0, 10, 480, 60)
         label_answer.setStyleSheet("font-size: 10pt")
         label_answer.setText(text_popup)
         label_answer.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         label_text = QLabel(self.popup_game)
-        label_text.setGeometry(QtCore.QRect(180, 100, 480, 50))
+        label_text.setGeometry(180, 100, 480, 50)
 
         pixmap = QPixmap(f"src/img/{image}.png")
         label_image = QLabel(self.popup_game)
-        label_image.setGeometry(QtCore.QRect(20, 30, 60, 60))
+        label_image.setGeometry(20, 30, 60, 60)
         label_image.setPixmap(pixmap)
         label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.button_ok = QPushButton('Вернуться в меню', label_text)
@@ -429,7 +505,7 @@ class GameWindow(MainWindow):
         self.button_ok.clicked.connect(self.return_to_menu)
         self.popup_game.rejected.connect(self.return_to_menu)
 
-        self.popup_game.exec()    
+        self.popup_game.exec()
 
     # Возврат в меню
     def return_to_menu(self):

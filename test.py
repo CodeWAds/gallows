@@ -1,35 +1,37 @@
-from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QPushButton, QLabel
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 
-class MyDialog(QDialog):
+class MyWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Диалоговое окно")
-        self.setGeometry(100, 100, 300, 200)
+        self.init_ui()
 
-        layout = QVBoxLayout()
+    def init_ui(self):
+        self.setGeometry(100, 100, 400, 200)
 
-        label = QLabel("Пример диалогового окна")
-        layout.addWidget(label)
+        self.button = QPushButton('Нажми меня', self)
+        self.label = QLabel('Пример текста', self)
 
-        closeButton = QPushButton("Закрыть")
-        closeButton.clicked.connect(self.close)  # Подключение кнопки к закрытию диалога
-        layout.addWidget(closeButton)
+        self.adjust_widget_sizes()  # Изначальная установка размеров виджетов
 
-        self.setLayout(layout)
+        self.show()
 
-    def closeEvent(self, event):
-        self.my_custom_function()
-        event.accept()  # Закрыть диалог
+    def adjust_widget_sizes(self):
+        button_width = self.width() // 4
+        button_height = self.height() // 8
 
-    def my_custom_function(self):
-        print("Функция при закрытии диалога")
+        label_width = self.width() // 2
+        label_height = self.height() // 8
 
-if __name__ == "__main__":
+        self.button.setGeometry(10, 10, button_width, button_height)
+        self.label.setGeometry(10, 50, label_width, label_height)
+
+    def resizeEvent(self, event):
+        self.adjust_widget_sizes()
+        super().resizeEvent(event)
+
+if __name__ == '__main__':
     app = QApplication([])
-
-    dialog = MyDialog()
-    dialog.exec()
-
+    window = MyWidget()
     app.exec()
