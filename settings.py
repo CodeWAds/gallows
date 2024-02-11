@@ -12,7 +12,7 @@ class Settings():
         self.resize(pixmap.width(), pixmap.height())
 
     # Базовый звук, для кнопок
-    def sound_button(self):
+    def sound_button_lang(self):
         if self.mus == False:
             self.mus = True
             sender  = self.sender()
@@ -28,6 +28,20 @@ class Settings():
         self.mus = False
     def enable_button(self):
         self.lang_button.setEnabled(True)
+    
+    def sound_button(self):
+        if self.mus == False:
+            self.mus = True
+            sender  = self.sender()
+            sender.setEnabled(False)
+            self.player = QMediaPlayer()
+            self.audioOutput = QAudioOutput()
+            self.player.setAudioOutput(self.audioOutput)
+            self.player.setSource(QUrl.fromLocalFile("src/sounds/system/buttons.wav"))
+            self.audioOutput.setVolume(50)
+            self.player.play()
+        self.mus = False
+        
        
     
     # Звук проигрыша
@@ -50,7 +64,7 @@ class Settings():
 
     # Обработчик изменения языка
     def change_lang(self):
-        self.sound_button()
+        self.sound_button_lang()
         self.lang_index = (
             self.lang_index + 1) % len(self.image_paths)
         self.load_image()
