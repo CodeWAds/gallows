@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Settings):
         self.setWindowIcon(icon)
         self.setWindowTitle("Виселица")
 
- # Добавление стека виджетов
+# Добавление стека виджетов
 class centralwidget(QStackedWidget):
     def __init__(self):
         super().__init__()
@@ -130,6 +130,7 @@ class StartWindow(QStackedWidget, Settings):
 
     def resizeEvent(self, event):
         self.adjust_widget_sizes()
+      
         super().resizeEvent(event)
 
 
@@ -143,10 +144,11 @@ class CategoryWindow(QDialog, Settings):
     def category_game(self):
         self.mus = False
         self.sound_button()
-        category_widget = QWidget(self)
-        category_widget.setObjectName("category_widget")
+        # ЛОМАЕТ КОД
+        # category_widget = QWidget(self)
+        # category_widget.setObjectName("category_widget")
 
-        self.name_menu_category = QLabel(category_widget)
+        self.name_menu_category = QLabel(self)
         self.name_menu_category.setGeometry(280, 100, 160, 50)
         self.name_menu_category.setStyleSheet("font-size: 25pt;")
         self.name_menu_category.setAlignment(
@@ -154,7 +156,7 @@ class CategoryWindow(QDialog, Settings):
         self.name_menu_category.setObjectName("name_game")
         self.name_menu_category.setText("Категория")
 
-        self.hardware_button = QPushButton(category_widget)
+        self.hardware_button = QPushButton(self)
         self.hardware_button.setGeometry(140, 260, 147, 39)
         self.hardware_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
@@ -173,7 +175,7 @@ class CategoryWindow(QDialog, Settings):
 
         self.hardware_button.clicked.connect(self.hardware)
 
-        self.software_button = QPushButton(category_widget)
+        self.software_button = QPushButton(self)
 
         self.software_button.setGeometry(292, 260, 147, 39)
         self.software_button.setCursor(QtGui.QCursor(
@@ -192,7 +194,7 @@ class CategoryWindow(QDialog, Settings):
                                      "обеспечение")
         self.software_button.clicked.connect(self.software)
 
-        self.internet_button = QPushButton(category_widget)
+        self.internet_button = QPushButton(self)
 
         self.internet_button.setGeometry(444, 260, 147, 39)
         self.internet_button.setCursor(QtGui.QCursor(
@@ -210,7 +212,7 @@ class CategoryWindow(QDialog, Settings):
         self.internet_button.setText("Интернет")
         self.internet_button.clicked.connect(self.internet)
 
-        self.ai_button = QPushButton(category_widget)
+        self.ai_button = QPushButton(self)
 
         self.ai_button.setGeometry(140, 310, 147, 39)
         self.ai_button.setCursor(QtGui.QCursor(
@@ -229,7 +231,7 @@ class CategoryWindow(QDialog, Settings):
                                "интеллект")
         self.ai_button.clicked.connect(self.ai)
 
-        self.design_button = QPushButton(category_widget)
+        self.design_button = QPushButton(self)
 
         self.design_button.setGeometry(292, 310, 147, 39)
         self.design_button.setCursor(QtGui.QCursor(
@@ -247,7 +249,7 @@ class CategoryWindow(QDialog, Settings):
         self.design_button.setText("Дизайн")
         self.design_button.clicked.connect(self.design)
 
-        self.cybersecurity_button = QPushButton(category_widget)
+        self.cybersecurity_button = QPushButton(self)
 
         self.cybersecurity_button.setGeometry(444, 310, 147, 39)
         self.cybersecurity_button.setCursor(QtGui.QCursor(
@@ -310,7 +312,7 @@ class CategoryWindow(QDialog, Settings):
         label_height = self.height() // 2
 
         # Центрирование названия категории относительно новых размеров окна
-        label_x = (self.width() - label_width) // 2
+        label_x = (self.width() - label_width) // 2 
         label_y = (self.height() - label_height) // 2 - 100
 
         self.name_menu_category.setGeometry(
@@ -514,7 +516,7 @@ class GameWindow(QDialog, Settings, Generation_words):
 
     # Возврат в меню
     def return_to_menu(self):
-        self.popup_game.hide()
+        self.popup_game.close()
         start_window = StartWindow()
         Stack.set_cor(start_window)
 
