@@ -5,6 +5,8 @@ from PyQt6.QtMultimedia import *
 from settings import Settings
 from generation_words import GenerationWords
 from PyQt6.QtCore import Qt
+from PyQt6.QtMultimedia import QSoundEffect
+
 
 
 import sys
@@ -12,12 +14,13 @@ import sys
 
 def set_cor(new_widget):
         previous_widget = Stack.currentWidget()
-        
+        if previous_widget:
+            previous_widget.deleteLater()
+        # Stack.removeWidget(previous_widget)
+
         Stack.addWidget(new_widget)
         
         Stack.setCurrentWidget(new_widget)
-        if previous_widget:
-            previous_widget.deleteLater()
 
 #  Главное окно
 class MainWindow(QMainWindow, Settings):
@@ -126,8 +129,7 @@ class StartWindow(QStackedWidget,Settings):
 
     def show_category_window(self):
         category_widget = CategoryWindow(lang_index=self.lang_index)
-        # previous_widget = Stack.currentWidget()
-        # previous_widget.deleteLater()
+
         set_cor(category_widget)
 
         
@@ -515,10 +517,9 @@ class GameWindow(QDialog, Settings, GenerationWords):
 
     # Возврат в меню
     def return_to_menu(self):
-        self.popup_game.close()
-        # self.popup_game.deleteLater()
+        self.popup_game.deleteLater()
         # previous_widget = Stack.currentWidget()
-        # previous_widget.deleteLater()
+        # # previous_widget.deleteLater()
         start_widget = StartWindow()
         set_cor(start_widget)
 

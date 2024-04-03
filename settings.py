@@ -6,6 +6,15 @@ from PyQt6 import QtCore
 # ПЕРЕДЕЛАТЬ СЛОВАРЬ НА ТЕКСТОВЫЙ ФАЙЛ! СМ. ТЗ
 class Settings():
 
+    def playSound(self):
+         if self.mus == False:
+            self.mus = True
+            # Создаем объект звукового эффекта и загружаем в него аудиофайл
+            sound_effect = QSoundEffect()
+            sound_effect.setSource(QUrl.fromLocalFile('src/sounds/system/buttons.wav')) # Замените 'click_sound.wav' на путь к вашему аудиофайлу
+            sound_effect.setVolume(1) # Устанавливаем громкость звука
+            sound_effect.play()
+
     # Загрузка изображения
     def load_image(self):
         pixmap = QPixmap(self.image_paths[self.lang_index])
