@@ -3,7 +3,7 @@ import random
 import translator
 
 
-class Generation_words():
+class GenerationWords():
 
     # Слово, показываемое игроку
     def generate_open_word(self):
@@ -29,7 +29,7 @@ class Generation_words():
             self.word_shown = self.word_of_items[self.random_index][1]
 
 
-    # Слово, которое игрок долже отгадать
+    # Слово, которое игрок должен отгадать
     def generate_hidden_word(self):
         if self.lang_index == 0:
             self._word_hide = self.word_of_items[self.random_index][1]
@@ -49,6 +49,3 @@ class Generation_words():
                 self._word_shown.append("\n")
             else:
                 self._word_shown.append(j)
-
-    # def generate_sound(self):
-    #     pass - доделать

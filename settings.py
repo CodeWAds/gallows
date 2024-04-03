@@ -3,6 +3,7 @@ from PyQt6.QtMultimedia import *
 from PyQt6.QtCore import QUrl, QTimer
 from PyQt6 import QtCore
 
+# ПЕРЕДЕЛАТЬ СЛОВАРЬ НА ТЕКСТОВЫЙ ФАЙЛ! СМ. ТЗ
 class Settings():
 
     # Загрузка изображения
@@ -15,41 +16,44 @@ class Settings():
     def sound_button_lang(self):
         if self.mus == False:
             self.mus = True
-            sender  = self.sender()
+            sender = self.sender()
             sender.setEnabled(False)
             self.player = QMediaPlayer()
             self.audioOutput = QAudioOutput()
             self.player.setAudioOutput(self.audioOutput)
-            self.player.setSource(QUrl.fromLocalFile("src/sounds/system/buttons.wav"))
+            self.player.setSource(QUrl.fromLocalFile(
+                "src/sounds/system/buttons.wav"))
             self.audioOutput.setVolume(50)
             self.player.play()
             timer = QTimer(self)
             timer.singleShot(500, self.enable_button)
         self.mus = False
+
     def enable_button(self):
         self.lang_button.setEnabled(True)
-    
+
     def sound_button(self):
         if self.mus == False:
             self.mus = True
-            sender  = self.sender()
+            sender = self.sender()
             sender.setEnabled(False)
             self.player = QMediaPlayer()
             self.audioOutput = QAudioOutput()
             self.player.setAudioOutput(self.audioOutput)
-            self.player.setSource(QUrl.fromLocalFile("src/sounds/system/buttons.wav"))
+            self.player.setSource(QUrl.fromLocalFile(
+                "src/sounds/system/buttons.wav"))
             self.audioOutput.setVolume(50)
             self.player.play()
         self.mus = False
-        
-       
-    
+
     # Звук проигрыша
+
     def sound_game_over(self):
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/system/game_over.mp3"))
+        self.player.setSource(QUrl.fromLocalFile(
+            "src/sounds/system/game_over.mp3"))
         self.audioOutput.setVolume(50)
         self.player.play()
 
@@ -58,7 +62,8 @@ class Settings():
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile("src/sounds/system/game_win.mp3"))
+        self.player.setSource(QUrl.fromLocalFile(
+            "src/sounds/system/game_win.mp3"))
         self.audioOutput.setVolume(50)
         self.player.play()
 
@@ -76,22 +81,24 @@ class Settings():
 
         else:
             self.start_button.setText("START")
-            self.name_game.setText("Gallows")
+            self.name_game.setText("Hangman")
             self.lang_button.setText("Switch\n"
                                      "language")
 
     def sound_words(self):
         self.mus = True
-        sender  = self.sender()
+        sender = self.sender()
         sender.setEnabled(False)
         self.player = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.player.setAudioOutput(self.audioOutput)
-        self.player.setSource(QUrl.fromLocalFile(f"src/sounds/words/{self.word_shown}.mp3"))
+        self.player.setSource(QUrl.fromLocalFile(
+            f"src/sounds/words/{self.word_shown}.mp3"))
         self.audioOutput.setVolume(50)
         self.player.play()
         timer = QTimer(self)
         timer.singleShot(3000, self.enable_words)
+
     def enable_words(self):
         self.mus = False
         self.sound_word.setEnabled(True)

@@ -3,7 +3,7 @@ from PyQt6.QtGui import QCloseEvent, QPixmap, QIcon
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtMultimedia import *
 from settings import Settings
-from generation_words import Generation_words
+from generation_words import GenerationWords
 from PyQt6.QtCore import Qt
 
 
@@ -27,23 +27,30 @@ class MainWindow(QMainWindow, Settings):
         self.setWindowTitle("Виселица")
 
 # Добавление стека виджетов
-class centralwidget(QStackedWidget):
+class CentralWidget(QStackedWidget):
     def __init__(self):
         super().__init__()
         start = StartWindow()
-        self.set_cor(start)
+        self.addWidget(start)
+        self.setCurrentWidget(start)
 
-    def set_cor(self, first_widget):
-        self.addWidget(first_widget)
-        self.setCurrentWidget(first_widget)
+    def set_cor(self, new_widget):
+        previous_widget = self.currentWidget()
+        # self.removeWidget(previous_widget)
+        self.addWidget(new_widget)
+        print(Stack.currentIndex())
+        self.setCurrentWidget(new_widget)
+        
 
 
-class StartWindow(QStackedWidget, Settings):
+class StartWindow(QStackedWidget,Settings):
     def __init__(self):
         super().__init__()
-        self.StartMenu()
-
-    def StartMenu(self):
+        self.start_menu()
+        
+        
+    def start_menu(self):
+        print("-+-")
         self.mus = False
 
         # Установка изображения языка
@@ -126,7 +133,12 @@ class StartWindow(QStackedWidget, Settings):
 
     def show_category_window(self):
         category_widget = CategoryWindow(lang_index=self.lang_index)
+        # previous_widget = Stack.currentWidget()
+        # previous_widget.deleteLater()
         Stack.set_cor(category_widget)
+
+        
+        
 
     def resizeEvent(self, event):
         self.adjust_widget_sizes()
@@ -135,7 +147,7 @@ class StartWindow(QStackedWidget, Settings):
 
 
 # Окно Категорий
-class CategoryWindow(QDialog, Settings):
+class CategoryWindow(QStackedWidget, Settings):
     def __init__(self, lang_index):
         super().__init__()
         self.lang_index = lang_index
@@ -144,9 +156,7 @@ class CategoryWindow(QDialog, Settings):
     def category_game(self):
         self.mus = False
         self.sound_button()
-        # ЛОМАЕТ КОД
-        # category_widget = QWidget(self)
-        # category_widget.setObjectName("category_widget")
+        self.sender().setEnabled(True)
 
         self.name_menu_category = QLabel(self)
         self.name_menu_category.setGeometry(280, 100, 160, 50)
@@ -280,6 +290,8 @@ class CategoryWindow(QDialog, Settings):
     def hardware(self):
         self.sound_button()
         game_window = GameWindow(category_words=1, lang_index=self.lang_index)
+        previous_widget = Stack.currentWidget()
+        previous_widget.deleteLater()
         Stack.set_cor(game_window)
 
     def software(self):
@@ -345,27 +357,21 @@ class CategoryWindow(QDialog, Settings):
 
 
 # Окно с игрой
-class GameWindow(QDialog, Settings, Generation_words):
+class GameWindow(QDialog, Settings, GenerationWords):
     def __init__(self, category_words, lang_index):
         super().__init__()
         self.category_words = category_words
         self.lang_index = lang_index
-        self.create_game_window()
+        self.game()
 
     # Создание окна игры, в соответствие с категорией
-    def create_game_window(self):
+    def game(self):
         self.mus = False
-        self.sound_button()
-        self.game_widget = QWidget(self)
-        self.game_widget.setObjectName("game_widget")
+
         self.generate_open_word()
         self.generate_hidden_word()
-        self.game(self.game_widget)
-
-    def game(self, widget):
-        self.widget = widget
         self.attempts_left = -1
-        self.gallows_picture = QLabel(widget)
+        self.gallows_picture = QLabel(self)
         self.gallows_picture.setGeometry(10, 10, 301, 281)
         pixmap_gallow = QPixmap("src/img/stages_gallows/stage_0.png")
         self.gallows_picture.setPixmap(pixmap_gallow)
@@ -388,7 +394,7 @@ class GameWindow(QDialog, Settings, Generation_words):
             keyboard = russian_keys
         else:
             keyboard = english_keys
-        self.label_keyboard = QLabel(widget)
+        self.label_keyboard = QLabel(self)
         self.label_keyboard.setGeometry(10, 316, 701, 151)
         self.keyboard_layout = QVBoxLayout(self.label_keyboard)
 
@@ -411,7 +417,7 @@ class GameWindow(QDialog, Settings, Generation_words):
         self.label_keyboard.setObjectName("label_keyboard")
 
         # Слово, показываемое игроку
-        open_word = QLabel(widget)
+        open_word = QLabel(self)
         open_word.setGeometry(320, 20, 391, 121)
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         open_word.setStyleSheet("font-size: 17pt;")
@@ -419,7 +425,7 @@ class GameWindow(QDialog, Settings, Generation_words):
         open_word.setObjectName("open_word")
 
         # Слово, которое нужно отгадать
-        self.hidden_word = QLabel(widget)
+        self.hidden_word = QLabel(self)
         self.hidden_word.setGeometry(320, 160, 391, 121)
         self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.hidden_word.setStyleSheet("font-size: 13pt;")
@@ -511,14 +517,19 @@ class GameWindow(QDialog, Settings, Generation_words):
             self.button_ok.setText(return_button)
         self.button_ok.clicked.connect(self.return_to_menu)
         self.popup_game.rejected.connect(self.return_to_menu)
-
+        # previous_widget = Stack.currentWidget()
+        # previous_widget.deleteLater()
         self.popup_game.exec()
+        
 
     # Возврат в меню
     def return_to_menu(self):
         self.popup_game.close()
-        start_window = StartWindow()
-        Stack.set_cor(start_window)
+        self.popup_game.deleteLater()
+        # previous_widget = Stack.currentWidget()
+        # previous_widget.deleteLater()
+        start_widget = StartWindow()
+        Stack.set_cor(start_widget)
 
     # Обработка выбора кнопок на виртуальной клавиатуре
     def make_guess(self):
@@ -550,7 +561,7 @@ class GameWindow(QDialog, Settings, Generation_words):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    Stack = centralwidget()
+    Stack = CentralWidget()
     window = MainWindow()
     window.show()
     app.exec()

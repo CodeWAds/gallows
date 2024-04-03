@@ -1,17 +1,26 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QDialog, QToolButton
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QStackedWidget, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QDialog
 from PyQt6.QtGui import QCloseEvent, QPixmap, QIcon
 from PyQt6 import QtCore, QtGui
 from PyQt6.QtMultimedia import *
 from settings import Settings
-from generation_words import Generation_words
+from generation_words import GenerationWords
 from PyQt6.QtCore import Qt
 
 
 import sys
 
 
-#  Главного меню
-class MainWindow(QMainWindow, Settings, Generation_words):
+def set_cor(new_widget):
+        previous_widget = Stack.currentWidget()
+        
+        Stack.addWidget(new_widget)
+        
+        Stack.setCurrentWidget(new_widget)
+        if previous_widget:
+            previous_widget.deleteLater()
+
+#  Главное окно
+class MainWindow(QMainWindow, Settings):
     def __init__(self):
         super().__init__()
         self.create_window()
@@ -21,19 +30,25 @@ class MainWindow(QMainWindow, Settings, Generation_words):
         self.setMinimumSize(720, 480)
         self.setStyleSheet("background-color: rgb(140, 83, 255);\n"
                            "font: 14pt \"Comic Sans MS\"")
-        self.StartMenu()
-
-    def StartMenu(self):
-        self.mus = False
-        self.centralwidget = QWidget(self)
-        self.centralwidget.setObjectName("centralwidget")
-
+        self.setCentralWidget(Stack)
         icon = QIcon("src/img/stages_gallows/stage_6.png")
         self.setWindowIcon(icon)
+        self.setWindowTitle("Виселица")
+
+
+class StartWindow(QStackedWidget,Settings):
+    def __init__(self):
+        super().__init__()
+        self.start_menu()
+        
+        
+    def start_menu(self):
+        # print("-+-")
+        self.mus = False
 
         # Установка изображения языка
         self.label_flag = QLabel(self)
-        self.label_flag.setGeometry(26, 10, 31, 31)
+        self.label_flag.setGeometry(26, 10, 30, 30)
         self.image_paths = ['src/img/flag_rus.png', 'src/img/flag_en.png']
         self.lang_index = 0
         self.load_image()
@@ -84,8 +99,6 @@ class MainWindow(QMainWindow, Settings, Generation_words):
         self.start_button.setText("СТАРТ")
         self.start_button.clicked.connect(self.show_category_window)
 
-        self.setCentralWidget(self.centralwidget)
-        self.setWindowTitle("Виселица")
 
     def adjust_widget_sizes(self):
 
@@ -111,19 +124,23 @@ class MainWindow(QMainWindow, Settings, Generation_words):
         font_size = label_height * 0.1
         self.name_game.setStyleSheet(f"font-size: {font_size}pt;")
 
-    def resizeEvent(self, event):
-        self.adjust_widget_sizes()
-        super().resizeEvent(event)
-
-    # Изменение окна
-
     def show_category_window(self):
         category_widget = CategoryWindow(lang_index=self.lang_index)
-        self.setCentralWidget(category_widget)
+        # previous_widget = Stack.currentWidget()
+        # previous_widget.deleteLater()
+        set_cor(category_widget)
+
+        
+        
+
+    def resizeEvent(self, event):
+        self.adjust_widget_sizes()
+      
+        super().resizeEvent(event)
 
 
 # Окно Категорий
-class CategoryWindow(MainWindow):
+class CategoryWindow(QWidget, Settings):
     def __init__(self, lang_index):
         super().__init__()
         self.lang_index = lang_index
@@ -132,10 +149,9 @@ class CategoryWindow(MainWindow):
     def category_game(self):
         self.mus = False
         self.sound_button()
-        category_widget = QWidget(self)
-        category_widget.setObjectName("category_widget")
+        self.sender().setEnabled(True)
 
-        self.name_menu_category = QLabel(category_widget)
+        self.name_menu_category = QLabel(self)
         self.name_menu_category.setGeometry(280, 100, 160, 50)
         self.name_menu_category.setStyleSheet("font-size: 25pt;")
         self.name_menu_category.setAlignment(
@@ -143,7 +159,7 @@ class CategoryWindow(MainWindow):
         self.name_menu_category.setObjectName("name_game")
         self.name_menu_category.setText("Категория")
 
-        self.hardware_button = QPushButton(category_widget)
+        self.hardware_button = QPushButton(self)
         self.hardware_button.setGeometry(140, 260, 147, 39)
         self.hardware_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
@@ -162,7 +178,7 @@ class CategoryWindow(MainWindow):
 
         self.hardware_button.clicked.connect(self.hardware)
 
-        self.software_button = QPushButton(category_widget)
+        self.software_button = QPushButton(self)
 
         self.software_button.setGeometry(292, 260, 147, 39)
         self.software_button.setCursor(QtGui.QCursor(
@@ -181,7 +197,7 @@ class CategoryWindow(MainWindow):
                                      "обеспечение")
         self.software_button.clicked.connect(self.software)
 
-        self.internet_button = QPushButton(category_widget)
+        self.internet_button = QPushButton(self)
 
         self.internet_button.setGeometry(444, 260, 147, 39)
         self.internet_button.setCursor(QtGui.QCursor(
@@ -199,7 +215,7 @@ class CategoryWindow(MainWindow):
         self.internet_button.setText("Интернет")
         self.internet_button.clicked.connect(self.internet)
 
-        self.ai_button = QPushButton(category_widget)
+        self.ai_button = QPushButton(self)
 
         self.ai_button.setGeometry(140, 310, 147, 39)
         self.ai_button.setCursor(QtGui.QCursor(
@@ -218,7 +234,7 @@ class CategoryWindow(MainWindow):
                                "интеллект")
         self.ai_button.clicked.connect(self.ai)
 
-        self.design_button = QPushButton(category_widget)
+        self.design_button = QPushButton(self)
 
         self.design_button.setGeometry(292, 310, 147, 39)
         self.design_button.setCursor(QtGui.QCursor(
@@ -236,7 +252,7 @@ class CategoryWindow(MainWindow):
         self.design_button.setText("Дизайн")
         self.design_button.clicked.connect(self.design)
 
-        self.cybersecurity_button = QPushButton(category_widget)
+        self.cybersecurity_button = QPushButton(self)
 
         self.cybersecurity_button.setGeometry(444, 310, 147, 39)
         self.cybersecurity_button.setCursor(QtGui.QCursor(
@@ -254,8 +270,6 @@ class CategoryWindow(MainWindow):
         self.cybersecurity_button.setText("Кибербезопасность")
         self.cybersecurity_button.clicked.connect(self.cybersecurity)
 
-        self.setCentralWidget(category_widget)
-
         if self.lang_index != 0:
             self.name_menu_category.setText("Category")
             self.hardware_button.setText("Hardware")
@@ -269,39 +283,39 @@ class CategoryWindow(MainWindow):
     def hardware(self):
         self.sound_button()
         game_window = GameWindow(category_words=1, lang_index=self.lang_index)
-        self.setCentralWidget(game_window)
+        set_cor(game_window)
 
     def software(self):
         self.sound_button()
         game_window = GameWindow(category_words=2, lang_index=self.lang_index)
-        self.setCentralWidget(game_window)
+        set_cor(game_window)
 
     def internet(self):
         self.sound_button()
         game_window = GameWindow(category_words=3, lang_index=self.lang_index)
-        self.setCentralWidget(game_window)
+        set_cor(game_window)
 
     def ai(self):
         self.sound_button()
         game_window = GameWindow(category_words=4, lang_index=self.lang_index)
-        self.setCentralWidget(game_window)
+        set_cor(game_window)
 
     def design(self):
         self.sound_button()
         game_window = GameWindow(category_words=5, lang_index=self.lang_index)
-        self.setCentralWidget(game_window)
+        set_cor(game_window)
 
     def cybersecurity(self):
         self.sound_button()
         game_window = GameWindow(category_words=6, lang_index=self.lang_index)
-        self.setCentralWidget(game_window)
+        set_cor(game_window)
 
     def adjust_widget_sizes(self):
         label_width = self.width() // 2
         label_height = self.height() // 2
 
         # Центрирование названия категории относительно новых размеров окна
-        label_x = (self.width() - label_width) // 2
+        label_x = (self.width() - label_width) // 2 
         label_y = (self.height() - label_height) // 2 - 100
 
         self.name_menu_category.setGeometry(
@@ -334,29 +348,21 @@ class CategoryWindow(MainWindow):
 
 
 # Окно с игрой
-class GameWindow(MainWindow):
+class GameWindow(QDialog, Settings, GenerationWords):
     def __init__(self, category_words, lang_index):
         super().__init__()
         self.category_words = category_words
         self.lang_index = lang_index
-        self.create_game_window()
+        self.game()
 
     # Создание окна игры, в соответствие с категорией
-    def create_game_window(self):
+    def game(self):
         self.mus = False
-        self.sound_button()
-        self.game_widget = QWidget(self)
-        self.game_widget.setObjectName("game_widget")
+
         self.generate_open_word()
         self.generate_hidden_word()
-        self.game(self.game_widget)
-
-        self.setCentralWidget(self.game_widget)
-
-    def game(self, widget):
-        self.widget = widget
         self.attempts_left = -1
-        self.gallows_picture = QLabel(widget)
+        self.gallows_picture = QLabel(self)
         self.gallows_picture.setGeometry(10, 10, 301, 281)
         pixmap_gallow = QPixmap("src/img/stages_gallows/stage_0.png")
         self.gallows_picture.setPixmap(pixmap_gallow)
@@ -379,7 +385,7 @@ class GameWindow(MainWindow):
             keyboard = russian_keys
         else:
             keyboard = english_keys
-        self.label_keyboard = QLabel(widget)
+        self.label_keyboard = QLabel(self)
         self.label_keyboard.setGeometry(10, 316, 701, 151)
         self.keyboard_layout = QVBoxLayout(self.label_keyboard)
 
@@ -402,7 +408,7 @@ class GameWindow(MainWindow):
         self.label_keyboard.setObjectName("label_keyboard")
 
         # Слово, показываемое игроку
-        open_word = QLabel(widget)
+        open_word = QLabel(self)
         open_word.setGeometry(320, 20, 391, 121)
         open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         open_word.setStyleSheet("font-size: 17pt;")
@@ -410,7 +416,7 @@ class GameWindow(MainWindow):
         open_word.setObjectName("open_word")
 
         # Слово, которое нужно отгадать
-        self.hidden_word = QLabel(widget)
+        self.hidden_word = QLabel(self)
         self.hidden_word.setGeometry(320, 160, 391, 121)
         self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.hidden_word.setStyleSheet("font-size: 13pt;")
@@ -436,8 +442,6 @@ class GameWindow(MainWindow):
     def adjust_widget_sizes(self):
         label_width = self.width() // 2
         label_height = self.height() // 2
-        
-        
 
     def resizeEvent(self, event):
         self.adjust_widget_sizes()
@@ -504,14 +508,19 @@ class GameWindow(MainWindow):
             self.button_ok.setText(return_button)
         self.button_ok.clicked.connect(self.return_to_menu)
         self.popup_game.rejected.connect(self.return_to_menu)
-
+        # previous_widget = Stack.currentWidget()
+        # previous_widget.deleteLater()
         self.popup_game.exec()
+        
 
     # Возврат в меню
     def return_to_menu(self):
-        self.popup_game.hide()
-        main_window = MainWindow()
-        self.setCentralWidget(main_window)
+        self.popup_game.close()
+        # self.popup_game.deleteLater()
+        # previous_widget = Stack.currentWidget()
+        # previous_widget.deleteLater()
+        start_widget = StartWindow()
+        set_cor(start_widget)
 
     # Обработка выбора кнопок на виртуальной клавиатуре
     def make_guess(self):
@@ -543,6 +552,11 @@ class GameWindow(MainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+
+    Stack = QStackedWidget()
+    start = StartWindow()
+    set_cor(start)
+    
     window = MainWindow()
     window.show()
-    app.exec()
+    sys.exit(app.exec())
