@@ -4,11 +4,11 @@ url = "https://voicerss-text-to-speech.p.rapidapi.com/"
 querystring = {"key": "6715231320574b7abd4a822d356445d0"}
 
 payload = {
-    "src": "",
+    "src": "Hello world!",
     "hl": "en-us",
     "r": "0",
     "v": "John",
-    "c": "mp3",
+    "c": "wav",
     "f": "48khz_8bit_stereo"
 }
 headers = {
@@ -22,7 +22,7 @@ response = requests.post(url, data=payload, headers=headers, params=querystring)
 # Check if the request was successful (status code 200)
 if response.status_code == 200:
     # Save the response content to a file
-    with open("output.mp3", "wb") as file:
+    with open("output.wav", "wb") as file:
         file.write(response.content)
     print("File saved successfully as output.mp3")
 else:

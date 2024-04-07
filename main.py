@@ -5,8 +5,6 @@ from PyQt6.QtMultimedia import *
 from settings import Settings
 from generation_words import GenerationWords
 from PyQt6.QtCore import Qt
-from PyQt6.QtMultimedia import QSoundEffect
-
 
 
 import sys
@@ -16,7 +14,6 @@ def set_cor(new_widget):
         previous_widget = Stack.currentWidget()
         if previous_widget:
             previous_widget.deleteLater()
-        # Stack.removeWidget(previous_widget)
 
         Stack.addWidget(new_widget)
         
@@ -46,7 +43,6 @@ class StartWindow(QStackedWidget,Settings):
         
         
     def start_menu(self):
-        # print("-+-")
         self.mus = False
 
         # Установка изображения языка
@@ -129,7 +125,8 @@ class StartWindow(QStackedWidget,Settings):
 
     def show_category_window(self):
         category_widget = CategoryWindow(lang_index=self.lang_index)
-
+        # previous_widget = Stack.currentWidget()
+        # previous_widget.deleteLater()
         set_cor(category_widget)
 
         
@@ -283,7 +280,6 @@ class CategoryWindow(QWidget, Settings):
             self.cybersecurity_button.setText("Cybersecurity")
 
     def hardware(self):
-        self.sound_button()
         game_window = GameWindow(category_words=1, lang_index=self.lang_index)
         set_cor(game_window)
 
@@ -359,6 +355,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
 
     # Создание окна игры, в соответствие с категорией
     def game(self):
+        self.sound_button()
         self.mus = False
 
         self.generate_open_word()
@@ -510,16 +507,12 @@ class GameWindow(QDialog, Settings, GenerationWords):
             self.button_ok.setText(return_button)
         self.button_ok.clicked.connect(self.return_to_menu)
         self.popup_game.rejected.connect(self.return_to_menu)
-        # previous_widget = Stack.currentWidget()
-        # previous_widget.deleteLater()
         self.popup_game.exec()
         
 
     # Возврат в меню
     def return_to_menu(self):
         self.popup_game.deleteLater()
-        # previous_widget = Stack.currentWidget()
-        # # previous_widget.deleteLater()
         start_widget = StartWindow()
         set_cor(start_widget)
 
