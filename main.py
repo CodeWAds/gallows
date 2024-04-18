@@ -253,6 +253,8 @@ class GameWindow(QDialog, Settings, GenerationWords):
         self.category_words = category_words
         self.lang_index = lang_index
         self.data = self.get_words()
+        self.generate_open_word()
+        self.generate_hidden_word()
         self.game()
 
     # Создание окна игры, в соответствие с категорией
@@ -260,8 +262,6 @@ class GameWindow(QDialog, Settings, GenerationWords):
         self.sound_button()
         self.mus = False
 
-        self.generate_open_word()
-        self.generate_hidden_word()
         self.attempts_left = -1
         self.gallows_picture = QLabel(self)
         self.gallows_picture.setGeometry(10, 10, 301, 281)

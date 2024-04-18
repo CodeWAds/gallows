@@ -1,7 +1,11 @@
 import requests
+import os
+from dotenv import load_dotenv
 
+load_dotenv("./src/config/.env")
+api_key = os.getenv("API_KEY")
 url = "https://voicerss-text-to-speech.p.rapidapi.com/"
-querystring = {"key": "6715231320574b7abd4a822d356445d0"}
+querystring = {"key": api_key}
 
 payload = {
     "src": "Hello world!",
