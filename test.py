@@ -20,6 +20,6 @@ def get_categories_and_count(file_path):
 # Замените 'categories.txt' на путь к вашему текстовому файлу
 file_path = './src/config/dictionary.txt'
 categories, count = get_categories_and_count(file_path)
-print("Названия категорий:", categories)
+print("Названия категорий:", len(categories["Интернет"]))
 print("Количество категорий:", count)
 
