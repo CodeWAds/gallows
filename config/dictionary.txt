@@ -223,3 +223,6 @@ patch management-управление патчами
 cryptography-криптография
 security policy-политика безопасности
 security breach-нарушение безопасности
+
+Мирослав
+maris-волк

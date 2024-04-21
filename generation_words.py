@@ -16,7 +16,6 @@ class GenerationWords():
             self.word_shown = self.data[self.category_words][self.random_index][1]
         
 
-
     # Слово, которое игрок должен отгадать
     def generate_hidden_word(self):
         if self.lang_index == 0:

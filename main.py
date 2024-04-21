@@ -7,7 +7,7 @@ from settings import Settings
 from generation_words import GenerationWords
 
 
-import sys
+import sys, asyncio
 
 #  Установка виджета
 def set_current(new_widget):
@@ -135,7 +135,6 @@ class CategoryWindow(QWidget, Settings):
         self.category_game()
 
     def category_game(self):
-        self.mus = False
         self.sound_button()
         self.sender().setEnabled(True)
 
@@ -260,8 +259,6 @@ class GameWindow(QDialog, Settings, GenerationWords):
     # Создание окна игры, в соответствие с категорией
     def game(self):
         self.sound_button()
-        self.mus = False
-
         self.attempts_left = -1
         self.gallows_picture = QLabel(self)
         self.gallows_picture.setGeometry(10, 10, 301, 281)
@@ -337,7 +334,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
             self.sound_word.setIcon(icon)
             self.sound_word.setIconSize(pixmap.size())
             self.sound_word.setStyleSheet("background-color: transparent")
-
+            
             self.sound_word.clicked.connect(self.sound_words)
 
     def adjust_widget_sizes(self):
@@ -350,7 +347,9 @@ class GameWindow(QDialog, Settings, GenerationWords):
 
     # Вызов дополнительного окна с результатом игры
     def show_popup(self, result_game):
+
         self.popup_game = QDialog(self)
+
         if result_game == "win":
             image = "cat_win"
         else:
@@ -364,6 +363,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
             text_popup = f"""Увы! Вы проиграли!\n
                 Правильный ответ: {self._word_hide}"""
 
+        self.popup_layout = QHBoxLayout(self.popup_game)
         self.popup_game.setWindowTitle(title)
         self.popup_game.setWindowIcon(
             QIcon("src/img/stages_gallows/stage_6.png"))
@@ -371,7 +371,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
 
         label_answer = QLabel(self.popup_game)
         label_answer.setGeometry(0, 10, 480, 60)
-        label_answer.setStyleSheet("font-size: 10pt")
+        label_answer.setStyleSheet("font-size: 10px")
         label_answer.setText(text_popup)
         label_answer.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
