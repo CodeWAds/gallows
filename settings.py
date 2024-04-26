@@ -7,7 +7,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
-# Отдельный поток, для запросов к серверу
+# Рабочий поток, для запросов к серверу
 class DownloadThread(QThread):
     finished = pyqtSignal(bool)
 
@@ -38,7 +38,7 @@ class DownloadThread(QThread):
                     file.write(response.content)
                 self.net_connect_flag = True
             else:
-                pass
+                self.net_connect_flag = False
         except:
             self.net_connect_flag = False
 
@@ -90,11 +90,10 @@ class Settings():
     # Озвучивание слова
     def sound_words(self):
         self.download_thread = DownloadThread(self.url, self.querystring, self.word_shown)
-        self.download_thread.finished.connect(self.on_download_finished)
-        self.download_thread.run()
+        self.download_thread.finished.connect(self.on_download_finished) # Назначение функции после выполенения действий в рабочем потоке
+        self.download_thread.start() # Запуск рабочего потока для загрузки озвученного слова
 
     # Сбор слов из dictionary.txt
-
     def get_words(self):
         categories = {}
         with open('./config/dictionary.txt', 'r', encoding='utf-8') as file:
@@ -106,7 +105,7 @@ class Settings():
                         current_category = line.strip()
                         categories[current_category] = []
                     else:
-                        splt = line.strip().split("-")
+                        splt = line.strip().split(":")
                         categories[current_category].append((splt[0], splt[1]))
                 else:
                     current_category = None

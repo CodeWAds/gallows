@@ -179,12 +179,13 @@ class CategoryWindow(QWidget, Settings):
             self.button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                       "background-color: #a29bfe;\n"
                                       "border-radius: 5px;\n"
+                                      "padding: 5px;\n"
                                       "font: 14px \"Comic Sans MS\";}\n"
                                       "QPushButton:hover { background-color:#8c7ae6; }"
                                       "")
             self.grid_buttons.addWidget(self.button, row, column, 1, 1)
             self.button.clicked.connect(
-                lambda _, name_categ=name_categ: self.category_selected(name_categ))
+                lambda _, name_categ=name_categ: self.category_select(name_categ))
 
         spacerItem1 = QSpacerItem(
             40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -203,47 +204,11 @@ class CategoryWindow(QWidget, Settings):
         self.page_layout.addItem(spacerItem4)
         self.page_layout.addLayout(self.grid_buttons)
 
-    def category_selected(self, name_categ):
+    def category_select(self, name_categ):
         game_window = GameWindow(
             category_words=name_categ, lang_index=self.lang_index)
         set_current(game_window)
-
-    # def adjust_widget_sizes(self):
-    #     label_width = self.width() // 2
-    #     label_height = self.height() // 2
-
-    #     # Центрирование названия категории относительно новых размеров окна
-    #     label_x = (self.width() - label_width) // 2
-    #     label_y = (self.height() - label_height) // 2 - 100
-
-    #     self.name_menu_category.setGeometry(
-    #         label_x, label_y, label_width, label_height)
-
-    #     font_size = label_height * 0.1
-    #     self.name_menu_category.setStyleSheet(f"font-size: {font_size}pt;")
-
-    #     # Рассчёт размеров и положения кнопок категорий
-    #     button_width = label_width // 3 + 5
-    #     button_height = 39
-    #     button_spacing = 10
-    #     buttons_per_row = 3
-
-    #     button_x = label_x
-    #     button_y = label_y + label_height + 20
-
-    #     for i, button in enumerate([self.hardware_button, self.software_button, self.internet_button, self.ai_button, self.design_button, self.cybersecurity_button]):
-    #         button.setGeometry(button_x, button_y, button_width, button_height)
-
-    #         if (i + 1) % buttons_per_row == 0:
-    #             button_x = label_x
-    #             button_y += button_height + button_spacing
-    #         else:
-    #             button_x += button_width + button_spacing
-
-    # def resizeEvent(self, event):
-    #     self.adjust_widget_sizes()
-    #     super().resizeEvent(event)
-
+        
 
 # Окно с игрой
 class GameWindow(QDialog, Settings, GenerationWords):
@@ -251,6 +216,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
         super().__init__()
         self.category_words = category_words
         self.lang_index = lang_index
+        self.attempts_left = -1
         self.data = self.get_words()
         self.generate_open_word()
         self.generate_hidden_word()
@@ -259,13 +225,28 @@ class GameWindow(QDialog, Settings, GenerationWords):
     # Создание окна игры, в соответствие с категорией
     def game(self):
         self.sound_button()
-        self.attempts_left = -1
+        
+        self.verticalLayout = QVBoxLayout(self)
+        spacerItem = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+
+        self.horizontalLayout = QHBoxLayout()
+        spacerItem1 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
+
         self.gallows_picture = QLabel(self)
-        self.gallows_picture.setGeometry(10, 10, 301, 281)
-        pixmap_gallow = QPixmap("src/img/stages_gallows/stage_0.png")
-        self.gallows_picture.setPixmap(pixmap_gallow)
-        self.resize(pixmap_gallow.width(), pixmap_gallow.height())
-        self.gallows_picture.setObjectName("gallow_picture")
+        self.gallows_picture.setPixmap(QPixmap("src/img/stages_gallows/stage_0.png"))
+        self.gallows_picture.setScaledContents(True)
+
+        self.horizontalLayout.addWidget(self.gallows_picture)
+     
+        spacerItem2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem2)
+        spacerItem3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem3)
+        spacerItem4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem4)
+        self.verticalLayout_2 = QVBoxLayout()
 
         english_keys = [
             ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -283,9 +264,45 @@ class GameWindow(QDialog, Settings, GenerationWords):
             keyboard = russian_keys
         else:
             keyboard = english_keys
-        self.label_keyboard = QLabel(self)
-        self.label_keyboard.setGeometry(10, 316, 701, 151)
-        self.keyboard_layout = QVBoxLayout(self.label_keyboard)
+
+        # Слово, показываемое игроку
+        if self.lang_index == 0:
+            self.open_word = QPushButton(self)
+            self.open_word.setCursor(QtGui.QCursor(
+                QtCore.Qt.CursorShape.PointingHandCursor))
+            self.open_word.setFlat(True)
+            pixmap = QPixmap("src/img/sound_word.png")
+            icon = QIcon(pixmap)
+            self.open_word.setIcon(icon)
+            self.open_word.setIconSize(pixmap.size())
+            self.open_word.setStyleSheet("background-color: transparent")
+            
+            self.open_word.clicked.connect(self.sound_words)
+        else:
+            self.open_word = QLabel(self)
+            self.open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            self.open_word.setStyleSheet("font-size: 17pt;")
+            self.open_word.setText(" ".join(self._word_shown))
+            self.open_word.setObjectName("open_word")
+
+        self.verticalLayout_2.addWidget(self.open_word)
+
+        # Слово, которое нужно отгадать
+        self.hidden_word = QLabel(self)
+        self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.hidden_word.setStyleSheet("font-size: 13pt;")
+        self.hidden_word.setText(" ".join(self.word_hide))
+        self.hidden_word.setObjectName("hidden_word")
+        self.verticalLayout_2.addWidget(self.hidden_word)
+
+        self.horizontalLayout.addLayout(self.verticalLayout_2)
+        spacerItem5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem5)
+        spacerItem6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem6)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        spacerItem7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout.addItem(spacerItem7)
 
         for row in keyboard:
             key_row = QHBoxLayout()
@@ -294,6 +311,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
                 key_row.addWidget(button_keyboard)
                 button_keyboard.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                               "background-color: #a29bfe;\n"
+                                              "padding: 15px;\n"
                                               "border-radius: 5px;\n"
                                               "font: 10pt \"Comic Sans MS\";}\n"
                                               "QPushButton:hover { background-color: #8c7ae6; }"
@@ -302,48 +320,11 @@ class GameWindow(QDialog, Settings, GenerationWords):
                     QtCore.Qt.CursorShape.PointingHandCursor))
                 button_keyboard.clicked.connect(self.make_guess)
 
-            self.keyboard_layout.addLayout(key_row)
-        self.label_keyboard.setObjectName("label_keyboard")
-
-        # Слово, показываемое игроку
-        open_word = QLabel(self)
-        open_word.setGeometry(320, 20, 391, 121)
-        open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        open_word.setStyleSheet("font-size: 17pt;")
-        open_word.setText(" ".join(self._word_shown))
-        open_word.setObjectName("open_word")
-
-        # Слово, которое нужно отгадать
-        self.hidden_word = QLabel(self)
-        self.hidden_word.setGeometry(320, 160, 391, 121)
-        self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.hidden_word.setStyleSheet("font-size: 13pt;")
-        self.hidden_word.setText(" ".join(self.word_hide))
-        self.hidden_word.setObjectName("hidden_word")
+            self.verticalLayout.addLayout(key_row)
+        spacerItem8 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout.addItem(spacerItem8)
         self.make_guess()
 
-        if self.lang_index == 0:
-            self.sound_word = QPushButton(self)
-            self.sound_word.setGeometry(665, 20, 48, 48)
-
-            self.sound_word.setCursor(QtGui.QCursor(
-                QtCore.Qt.CursorShape.PointingHandCursor))
-            self.sound_word.setFlat(True)
-            pixmap = QPixmap("src/img/sound_word.png")
-            icon = QIcon(pixmap)
-            self.sound_word.setIcon(icon)
-            self.sound_word.setIconSize(pixmap.size())
-            self.sound_word.setStyleSheet("background-color: transparent")
-            
-            self.sound_word.clicked.connect(self.sound_words)
-
-    def adjust_widget_sizes(self):
-        label_width = self.width() // 2
-        label_height = self.height() // 2
-
-    def resizeEvent(self, event):
-        self.adjust_widget_sizes()
-        super().resizeEvent(event)
 
     # Вызов дополнительного окна с результатом игры
     def show_popup(self, result_game):
