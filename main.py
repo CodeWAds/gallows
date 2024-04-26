@@ -6,7 +6,6 @@ from PyQt6.QtMultimedia import *
 from settings import Settings
 from generation_words import GenerationWords
 
-
 import sys
 
 #  Установка виджета
@@ -45,20 +44,19 @@ class StartWindow(QWidget, Settings):
         
         self.lang_index = 0
 
-        self.verticalLayout_4 = QVBoxLayout(self)
-        self.horizontalLayout = QHBoxLayout()
-        self.verticalLayout_5 = QVBoxLayout()
+        self.verticalLayout_main = QVBoxLayout(self)
+        self.horizontalLayout_up_page = QHBoxLayout()
+        self.verticalLayout_mode = QVBoxLayout()
 
         # Текущий режим игры
         self.label_mode = QLabel(self)
         self.label_mode.setText("EN-RU")
-        # self.label_mode.setGeometry(20, 10, 50, 30)
         self.label_mode.setObjectName("label_mode")
-        self.label_mode.setStyleSheet("font-size: 10px;")
-        self.verticalLayout_5.addWidget(self.label_mode)
+        self.label_mode.setStyleSheet("font-size: 20px;")
+        self.label_mode.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.verticalLayout_mode.addWidget(self.label_mode)
 
         self.lang_button = QPushButton(self)
-        # self.lang_button.setGeometry(10, 40, 70, 30)
         self.lang_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
         self.lang_button.setLayoutDirection(
@@ -67,22 +65,23 @@ class StartWindow(QWidget, Settings):
         self.lang_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                        "background-color: #a29bfe;\n"
                                        "border-radius: 5px;\n"
-                                       "font: 7pt \"Comic Sans MS\";}\n"
+                                       "padding: 5px;\n"
+                                       "font: 12px \"Comic Sans MS\";}\n"
                                        "QPushButton:hover { background-color: #8c7ae6; }"
                                        "")
         self.lang_button.setObjectName("lang_button")
         self.lang_button.setText("Сменить\n"
                                  "режим")
-        self.verticalLayout_5.addWidget(self.lang_button)
-        self.horizontalLayout.addLayout(self.verticalLayout_5)
         self.lang_button.clicked.connect(self.change_lang)
-
+        self.verticalLayout_mode.addWidget(self.lang_button)
+        self.horizontalLayout_up_page.addLayout(self.verticalLayout_mode)
+        
         spacerItem = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout.addItem(spacerItem)
-        self.verticalLayout_4.addLayout(self.horizontalLayout)
+        self.horizontalLayout_up_page.addItem(spacerItem)
+        self.verticalLayout_main.addLayout(self.horizontalLayout_up_page)
         spacerItem1 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-        self.verticalLayout_4.addItem(spacerItem1)
+        self.verticalLayout_main.addItem(spacerItem1)
         self.verticalLayout =QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         spacerItem2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
@@ -97,9 +96,9 @@ class StartWindow(QWidget, Settings):
 
         spacerItem3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         self.verticalLayout.addItem(spacerItem3)
-        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_button = QHBoxLayout()
         spacerItem4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem4)
+        self.horizontalLayout_button.addItem(spacerItem4)
 
         self.start_button = QPushButton(self)
         self.start_button.setCursor(QtGui.QCursor(
@@ -110,8 +109,8 @@ class StartWindow(QWidget, Settings):
         self.start_button.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                         "background-color: #a29bfe;\n"
                                         "border-radius: 5px;\n"
-                                        "padding: 50px;\n"
-                                        "font: 13pt Comic Sans MS}"
+                                        "padding: 20px;\n"
+                                        "font: 20px Comic Sans MS}"
                                         "QPushButton:hover { background-color: #8c7ae6; }"
                                         "")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -119,26 +118,24 @@ class StartWindow(QWidget, Settings):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.start_button.sizePolicy().hasHeightForWidth())
         self.start_button.setSizePolicy(sizePolicy)
-        self.start_button.setMinimumSize(QtCore.QSize(160, 40))
         self.start_button.setObjectName("start_button")
         self.start_button.setText("СТАРТ")
         
-        self.horizontalLayout_3.addWidget(self.start_button)
+        self.horizontalLayout_button.addWidget(self.start_button)
         self.start_button.clicked.connect(self.show_category_window)
 
         spacerItem5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem5)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
-        self.verticalLayout_4.addLayout(self.verticalLayout)
+        self.horizontalLayout_button.addItem(spacerItem5)
+        self.verticalLayout.addLayout(self.horizontalLayout_button)
+        self.verticalLayout_main.addLayout(self.verticalLayout)
         spacerItem6 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-        self.verticalLayout_4.addItem(spacerItem6)
+        self.verticalLayout_main.addItem(spacerItem6)
         spacerItem7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-        self.verticalLayout_4.addItem(spacerItem7)
+        self.verticalLayout_main.addItem(spacerItem7)
 
     def show_category_window(self):
         category_widget = CategoryWindow(lang_index=self.lang_index)
         set_current(category_widget)
-
 
 # Окно Категорий
 class CategoryWindow(QWidget, Settings):
@@ -185,7 +182,6 @@ class CategoryWindow(QWidget, Settings):
             sizePolicy.setHeightForWidth(
                 self.button.sizePolicy().hasHeightForWidth())
             self.button.setSizePolicy(sizePolicy)
-            self.button.setMinimumSize(QtCore.QSize(160, 50))
             self.button.setText(f"{name_categ}")
             self.button.setCursor(QtGui.QCursor(
                 QtCore.Qt.CursorShape.PointingHandCursor))
@@ -277,7 +273,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
         else:
             self.open_word = QLabel(self)
             self.open_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            self.open_word.setStyleSheet("font-size: 17pt;")
+            self.open_word.setStyleSheet("font-size: 23px;")
             self.open_word.setText(" ".join(self._word_shown))
             self.open_word.setObjectName("open_word")
 
@@ -286,7 +282,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
         # Слово, которое нужно отгадать
         self.hidden_word = QLabel(self)
         self.hidden_word.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.hidden_word.setStyleSheet("font-size: 13pt;")
+        self.hidden_word.setStyleSheet("font-size: 21px;")
         self.hidden_word.setText(" ".join(self.word_hide))
         self.hidden_word.setObjectName("hidden_word")
         self.verticalLayout_2.addWidget(self.hidden_word)
@@ -326,7 +322,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
                                               "background-color: #a29bfe;\n"
                                               "padding: 10px;\n"
                                               "border-radius: 5px;\n"
-                                              "font: 10pt \"Comic Sans MS\";}\n"
+                                              "font: 15px \"Comic Sans MS\";}\n"
                                               "QPushButton:hover { background-color: #8c7ae6; }"
                                               "")
                 button_keyboard.setCursor(QtGui.QCursor(
@@ -400,7 +396,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
                                      "background-color: #a29bfe;\n"
                                      "padding: 5px;\n"
                                      "border-radius: 5px;\n"
-                                     "font: 10pt \"Comic Sans MS\";}\n"
+                                     "font: 17px \"Comic Sans MS\";}\n"
                                      "QPushButton:hover { background-color: #8c7ae6; }"
                                      "")
         self.button_ok.setCursor(QtGui.QCursor(
