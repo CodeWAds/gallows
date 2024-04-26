@@ -124,3 +124,30 @@ class Settings():
             info_message.setWindowTitle("Нет подключения к сети")
             info_message.setStandardButtons(QMessageBox.StandardButton.Ok)
             info_message.exec()
+
+    # Обработка выбора кнопок на виртуальной клавиатуре
+    def make_guess(self):
+        self.sound_button()
+        sender = self.sender()
+        self.guess = sender.text()
+        self.guess_letter = self.guess.lower()
+        sender.setEnabled(False)
+
+        if self.guess_letter in self._word_hide:
+            for i, letter in enumerate(self._word_hide):
+                if letter == self.guess_letter:
+                    self.word_hide[i] = self.guess_letter
+            self.hidden_word.setText(" ".join(self.word_hide))
+        else:
+            self.attempts_left += 1
+            pixmap_gallow = QPixmap(
+                f"src/img/stages_gallows/stage_{self.attempts_left}.png")
+            self.gallows_picture.setPixmap(pixmap_gallow)
+        if "_" not in self.word_hide:
+            self.sound_game_win()
+            self.result_game = "win"
+            self.show_popup(self.result_game)
+        elif self.attempts_left == 6:
+            self.sound_game_over()
+            self.result_game = "over"
+            self.show_popup(self.result_game)

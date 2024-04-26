@@ -7,7 +7,7 @@ from settings import Settings
 from generation_words import GenerationWords
 
 
-import sys, asyncio
+import sys
 
 #  Установка виджета
 def set_current(new_widget):
@@ -36,29 +36,29 @@ class MainWindow(QMainWindow, Settings):
         self.setWindowTitle("Виселица")
 
 
-class StartWindow(QStackedWidget, Settings):
+class StartWindow(QWidget, Settings):
     def __init__(self):
         super().__init__()
         self.start_menu()
 
     def start_menu(self):
+        
+        self.lang_index = 0
+
+        self.verticalLayout_4 = QVBoxLayout(self)
+        self.horizontalLayout = QHBoxLayout()
+        self.verticalLayout_5 = QVBoxLayout()
 
         # Текущий режим игры
-        self.label_mode = QLabel("EN-RU", self)
-        self.label_mode.setGeometry(20, 10, 50, 30)
-        self.lang_index = 0
+        self.label_mode = QLabel(self)
+        self.label_mode.setText("EN-RU")
+        # self.label_mode.setGeometry(20, 10, 50, 30)
         self.label_mode.setObjectName("label_mode")
-        self.label_mode.setStyleSheet("font-size: 10pt;")
-
-        self.name_game = QLabel(self)
-        self.name_game.setStyleSheet("font-size: 25pt;")
-        self.name_game.setObjectName("name_game")
-        self.name_game.setText("Виселица")
-        self.name_game.setGeometry(280, 100, 160, 50)
-        self.name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_mode.setStyleSheet("font-size: 10px;")
+        self.verticalLayout_5.addWidget(self.label_mode)
 
         self.lang_button = QPushButton(self)
-        self.lang_button.setGeometry(10, 40, 70, 30)
+        # self.lang_button.setGeometry(10, 40, 70, 30)
         self.lang_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
         self.lang_button.setLayoutDirection(
@@ -73,10 +73,35 @@ class StartWindow(QStackedWidget, Settings):
         self.lang_button.setObjectName("lang_button")
         self.lang_button.setText("Сменить\n"
                                  "режим")
+        self.verticalLayout_5.addWidget(self.lang_button)
+        self.horizontalLayout.addLayout(self.verticalLayout_5)
         self.lang_button.clicked.connect(self.change_lang)
 
+        spacerItem = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(spacerItem)
+        self.verticalLayout_4.addLayout(self.horizontalLayout)
+        spacerItem1 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem1)
+        self.verticalLayout =QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        spacerItem2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout.addItem(spacerItem2)
+
+        self.name_game = QLabel(self)
+        self.name_game.setStyleSheet("font-size: 50px;")
+        self.name_game.setObjectName("name_game")
+        self.name_game.setText("Виселица")
+        self.name_game.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.verticalLayout.addWidget(self.name_game)
+
+        spacerItem3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout.addItem(spacerItem3)
+        self.horizontalLayout_3 = QHBoxLayout()
+        spacerItem4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem4)
+
         self.start_button = QPushButton(self)
-        self.start_button.setGeometry(280, 260, 160, 40)
         self.start_button.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
         self.start_button.setLayoutDirection(
@@ -89,42 +114,30 @@ class StartWindow(QStackedWidget, Settings):
                                         "font: 13pt Comic Sans MS}"
                                         "QPushButton:hover { background-color: #8c7ae6; }"
                                         "")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.start_button.sizePolicy().hasHeightForWidth())
+        self.start_button.setSizePolicy(sizePolicy)
+        self.start_button.setMinimumSize(QtCore.QSize(160, 40))
         self.start_button.setObjectName("start_button")
         self.start_button.setText("СТАРТ")
+        
+        self.horizontalLayout_3.addWidget(self.start_button)
         self.start_button.clicked.connect(self.show_category_window)
 
-    def adjust_widget_sizes(self):
-
-        label_width = self.width() // 2
-        label_height = self.height() // 2
-
-        # Центрируем название игры относительно новых размеров окна
-        label_x = (self.width() - label_width) // 2
-        label_y = (self.height() - label_height) // 2 - 100
-
-        self.name_game.setGeometry(label_x, label_y, label_width, label_height)
-
-        # Обновляем размеры и положение кнопки "СТАРТ"
-        button_width = label_width
-        button_height = 40
-        button_x = label_x
-        button_y = label_y + label_height + 20
-
-        self.start_button.setGeometry(
-            button_x, button_y, button_width, button_height)
-
-        # Устанавливаем размер текста пропорционально высоте виджета
-        font_size = label_height * 0.1
-        self.name_game.setStyleSheet(f"font-size: {font_size}pt;")
+        spacerItem5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem5)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_4.addLayout(self.verticalLayout)
+        spacerItem6 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem6)
+        spacerItem7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem7)
 
     def show_category_window(self):
         category_widget = CategoryWindow(lang_index=self.lang_index)
         set_current(category_widget)
-
-    def resizeEvent(self, event):
-        self.adjust_widget_sizes()
-
-        super().resizeEvent(event)
 
 
 # Окно Категорий
@@ -231,7 +244,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
         self.verticalLayout.addItem(spacerItem)
 
         self.horizontalLayout = QHBoxLayout()
-        spacerItem1 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        spacerItem1 = QSpacerItem(60, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
 
         self.gallows_picture = QLabel(self)
@@ -247,23 +260,6 @@ class GameWindow(QDialog, Settings, GenerationWords):
         spacerItem4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.horizontalLayout.addItem(spacerItem4)
         self.verticalLayout_2 = QVBoxLayout()
-
-        english_keys = [
-            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-            ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
-        ]
-
-        russian_keys = [
-            ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ'],
-            ['Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э'],
-            ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю']
-        ]
-
-        if self.lang_index == 0:
-            keyboard = russian_keys
-        else:
-            keyboard = english_keys
 
         # Слово, показываемое игроку
         if self.lang_index == 0:
@@ -304,6 +300,23 @@ class GameWindow(QDialog, Settings, GenerationWords):
         spacerItem7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         self.verticalLayout.addItem(spacerItem7)
 
+        english_keys = [
+            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+            ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+        ]
+
+        russian_keys = [
+            ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ'],
+            ['Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э'],
+            ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю']
+        ]
+
+        if self.lang_index == 0:
+            keyboard = russian_keys
+        else:
+            keyboard = english_keys
+
         for row in keyboard:
             key_row = QHBoxLayout()
             for key in row:
@@ -311,7 +324,7 @@ class GameWindow(QDialog, Settings, GenerationWords):
                 key_row.addWidget(button_keyboard)
                 button_keyboard.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                               "background-color: #a29bfe;\n"
-                                              "padding: 15px;\n"
+                                              "padding: 10px;\n"
                                               "border-radius: 5px;\n"
                                               "font: 10pt \"Comic Sans MS\";}\n"
                                               "QPushButton:hover { background-color: #8c7ae6; }"
@@ -330,6 +343,8 @@ class GameWindow(QDialog, Settings, GenerationWords):
     def show_popup(self, result_game):
 
         self.popup_game = QDialog(self)
+        self.verticalLayout = QVBoxLayout(self.popup_game)
+        self.gridLayout = QGridLayout()
 
         if result_game == "win":
             image = "cat_win"
@@ -341,30 +356,46 @@ class GameWindow(QDialog, Settings, GenerationWords):
             text_popup = "Поздравляем! Вы выиграли!"
         else:
             title = "Поражение!"
-            text_popup = f"""Увы! Вы проиграли!\n
-                Правильный ответ: {self._word_hide}"""
+            text_popup = f"""Увы! Вы проиграли!\nПравильный ответ: {self._word_hide}"""
 
-        self.popup_layout = QHBoxLayout(self.popup_game)
         self.popup_game.setWindowTitle(title)
         self.popup_game.setWindowIcon(
             QIcon("src/img/stages_gallows/stage_6.png"))
         self.popup_game.setFixedSize(480, 150)
 
+        label_image = QLabel(self.popup_game)
+        label_image.setPixmap(QPixmap(f"src/img/{image}.png"))
+        label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.gridLayout.addWidget(label_image, 1, 0, 1, 1)
+        spacerItem3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.gridLayout.addItem(spacerItem3, 1, 1, 1, 1)
+        spacerItem = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.gridLayout.addItem(spacerItem, 1, 2, 1, 1)
+
         label_answer = QLabel(self.popup_game)
-        label_answer.setGeometry(0, 10, 480, 60)
-        label_answer.setStyleSheet("font-size: 10px")
+        label_answer.setStyleSheet("font-size: 15px")
         label_answer.setText(text_popup)
         label_answer.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.gridLayout.addWidget(label_answer, 1, 3, 1, 1)
+        
+        spacerItem1 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.gridLayout.addItem(spacerItem1, 1, 4, 1, 1)
+        spacerItem4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.gridLayout.addItem(spacerItem4, 1, 5, 1, 1)
+        spacerItem2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.gridLayout.addItem(spacerItem2, 1, 6, 1, 1)
+        spacerItem11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.gridLayout.addItem(spacerItem11, 1, 7, 1, 1)
+    
+        self.gridLayout.addWidget(label_answer, 1, 3, 1, 1)
 
-        label_text = QLabel(self.popup_game)
-        label_text.setGeometry(180, 100, 480, 50)
+        self.verticalLayout.addLayout(self.gridLayout)
 
-        pixmap = QPixmap(f"src/img/{image}.png")
-        label_image = QLabel(self.popup_game)
-        label_image.setGeometry(20, 30, 60, 60)
-        label_image.setPixmap(pixmap)
-        label_image.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.button_ok = QPushButton('Вернуться в меню', label_text)
+        self.horizontalLayout = QHBoxLayout()
+        spacerItem5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem5)
+
+        self.button_ok = QPushButton('Вернуться в меню')
         self.button_ok.setStyleSheet("QPushButton{border: 1px solid #dfe6e9;\n"
                                      "background-color: #a29bfe;\n"
                                      "padding: 5px;\n"
@@ -374,8 +405,12 @@ class GameWindow(QDialog, Settings, GenerationWords):
                                      "")
         self.button_ok.setCursor(QtGui.QCursor(
             QtCore.Qt.CursorShape.PointingHandCursor))
-
         self.button_ok.setText("Вернуться в меню")
+        self.horizontalLayout.addWidget(self.button_ok)
+        spacerItem6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalLayout.addItem(spacerItem6)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
         self.button_ok.clicked.connect(self.return_to_menu)
         self.popup_game.rejected.connect(self.return_to_menu)
         self.popup_game.exec()
@@ -385,33 +420,6 @@ class GameWindow(QDialog, Settings, GenerationWords):
         self.popup_game.deleteLater()
         start_widget = StartWindow()
         set_current(start_widget)
-
-    # Обработка выбора кнопок на виртуальной клавиатуре
-    def make_guess(self):
-        self.sound_button()
-        sender = self.sender()
-        self.guess = sender.text()
-        self.guess_letter = self.guess.lower()
-        sender.setEnabled(False)
-
-        if self.guess_letter in self._word_hide:
-            for i, letter in enumerate(self._word_hide):
-                if letter == self.guess_letter:
-                    self.word_hide[i] = self.guess_letter
-            self.hidden_word.setText(" ".join(self.word_hide))
-        else:
-            self.attempts_left += 1
-            pixmap_gallow = QPixmap(
-                f"src/img/stages_gallows/stage_{self.attempts_left}.png")
-            self.gallows_picture.setPixmap(pixmap_gallow)
-        if "_" not in self.word_hide:
-            self.sound_game_win()
-            self.result_game = "win"
-            self.show_popup(self.result_game)
-        elif self.attempts_left == 6:
-            self.sound_game_over()
-            self.result_game = "over"
-            self.show_popup(self.result_game)
 
 
 if __name__ == '__main__':
