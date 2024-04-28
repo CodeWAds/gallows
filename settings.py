@@ -3,8 +3,7 @@ from PyQt6.QtMultimedia import *
 from PyQt6.QtCore import QUrl, QThread, pyqtSignal
 from PyQt6.QtWidgets import QMessageBox
 
-import requests
-import os
+import requests, os
 from dotenv import load_dotenv
 
 # Рабочий поток, для запросов к серверу
@@ -58,12 +57,6 @@ class Settings():
         self.sound_effect.setSource(
             QUrl.fromLocalFile("src/sounds/system/buttons.wav"))
         self.sound_effect.play()
-
-    # Загрузка изображения
-    def load_image(self):
-        pixmap = QPixmap(self.image_paths[self.lang_index])
-        self.label_flag.setPixmap(pixmap)
-        self.resize(pixmap.width(), pixmap.height())
 
     # Звук проигрыша
     def sound_game_over(self):
