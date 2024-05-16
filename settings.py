@@ -17,7 +17,7 @@ class DownloadThread(QThread):
         self.payload = {
             "src": {word_shown},
             "hl": "en-us",
-            "r": "0",
+            "r": "-2",
             "v": "John",
             "c": "wav",
             "f": "48khz_8bit_stereo"

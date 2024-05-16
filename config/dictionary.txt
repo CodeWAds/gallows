@@ -1,30 +1,20 @@
 Аппаратное обеспечение
-bus:шина
-cable:кабель
-central processing unit:центральный процессор
 computer case:корпус
 device:устройство
 fan:вентилятор
-graphics card:видеокарта
-graphics processing unit:графический процессор
 hard disk drive:жесткий диск
 laptop:ноутбук
 light-emitting diode:светодиод
-motherboard:материнская плата
 network card:сетевая карта
-port:порт
 power supply unit:блок питания
 solid-state drive:твердотельный накопитель
 sound card:звуковая карта
 storage device:накопитель
 touch screen:сенсорный экран
 air cooling:воздушное охлаждение
-expansion card:расширительная карта
 optical disk drive:оптический привод
-uninterruptible power source:источник бесперебойного питания
 random-access memory:оперативная память
 read-only memory:постоянное запоминающее устройство
-removable media:съемные носители
 water cooling:водяное охлаждение
 monitor:монитор
 printer:принтер
@@ -40,9 +30,7 @@ joystick:джойстик
 compiler:компилятор
 database:база данных
 debugger:отладчик
-desktop application:приложение для настольного компьютера
 device driver:драйвер устройства
-graphical user interface:графический пользовательский интерфейс
 kernel:ядро
 mobile application:мобильное приложение
 programming language:язык программирования
@@ -67,16 +55,13 @@ executable:исполняемый файл
 interpreter:интерпретатор
 operating system:операционная система
 application software:прикладное программное обеспечение
-aspect oriented programming:аспектно-ориентированное программирование
 binary data:двоичные данные
 commercial software:платное программное обеспечение
 data:данные
 data processing:обработка данных
-extreme programming:экстремальное программирование
 firmware:микропрограмма
 freeware:бесплатное программное обеспечение
 incremental development:инкрементная модель разработки
-integrated development environment:интегрированная среда разработки
 iterative development:итеративная модель разработки
 malicious software:вредоносное программное обеспечение
 prototyping:создание прототипа
@@ -92,37 +77,26 @@ waterfall model:каскадная модель разработки
 
 Интернет
 bookmark:закладка
-bridge:мост
+password:пароль
 browser:браузер
-domain:домен
 firewall:межсетевой экран
-gateway:шлюз
 hyperlink:гиперссылка
-node:узел сети
 packet:пакет
-patch cord:коммутационный кабель
 router:маршрутизатор
 search engine:поисковая система
-subdomain:поддомен
 switch:коммутатор
 website:веб-сайт
-wireless network:беспроводная сеть
 bandwidth:пропускная способность
-broadband:широкополосный доступ в интернет
-client-server architecture:клиент-серверная архитектура
 cloud computing:облачные вычисления
 cloud storage:облачное хранилище данных
-dynamic host configuration protocol:протокол динамической настройки узла
-domain name system:система доменных имен
-instant messaging:обмен мгновенными сообщениями
-Internet service provider:интернет-провайдер
 local area network:локальная сеть
 latency:задержка
-media access control address:аппаратный адрес
 peer-to-peer:одноранговая сеть
 twisted pair:витая пара
-voice over ip:голосовая связь через интернет
 wide area network:глобальная сеть
+mail:почта
+hyperlink:гиперссылка
+internet service provider:интернет провайдер 
 
 Искусственный интеллект
 artificial intelligence:искусственный интеллект
@@ -136,7 +110,6 @@ supervised learning:обучение с учителем
 unsupervised learning:обучение без учителя
 algorithm:алгоритм
 data mining:поиск данных
-predictive analytics:прогностическая аналитика
 automation:автоматизация
 chatbot:чат-бот
 computer program:компьютерная программа
@@ -146,7 +119,6 @@ feature engineering:инженерия признаков
 knowledge representation:представление знаний
 pattern recognition:распознавание образов
 speech recognition:распознавание речи
-algorithmic bias:алгоритмический уклон
 augmented reality:дополненная реальность
 big data:большие данные
 cloud computing:облачные вычисления
@@ -156,7 +128,6 @@ ethics in ai:этика в искусственном интеллекте
 fuzzy logic:нечеткая логика
 intelligent agent:интеллектуальный агент
 machine translation:машинный перевод
-predictive modeling:прогностическое моделирование
 robotics:робототехника
 sentiment analysis:анализ настроений
 smart home:умный дом
@@ -196,7 +167,6 @@ gradient:градиент
 pixel:пиксель
 
 Кибербезопасность
-cybersecurity:кибербезопасность
 antivirus:антивирус
 malware:вредоносное программное обеспечение
 phishing:фишинг
