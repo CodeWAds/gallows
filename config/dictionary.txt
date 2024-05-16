@@ -137,8 +137,6 @@ virtual reality:виртуальная реальность
 
 Дизайн
 design:дизайн
-user interface:пользовательский интерфейс
-user experience:пользовательский опыт
 graphic design:графический дизайн
 web design:веб-дизайн
 interaction design:дизайн взаимодействия
