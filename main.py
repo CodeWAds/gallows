@@ -258,7 +258,7 @@ class CategoryWindow(QWidget, Settings):
 
 
 # Окно с игрой
-class GameWindow(QDialog, Settings, GenerationWords):
+class GameWindow(QWidget, Settings, GenerationWords):
     def __init__(self, category_words, lang_index):
         super().__init__()
         self.category_words = category_words
